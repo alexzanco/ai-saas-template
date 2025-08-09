@@ -198,7 +198,7 @@ const config: NextConfig = {
     },
     // API cache
     {
-      source: '/api/(.*)',
+      source: '/api/((?!chat).*)',
       headers: [
         {
           key: 'Cache-Control',
