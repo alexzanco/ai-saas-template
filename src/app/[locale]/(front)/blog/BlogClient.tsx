@@ -12,9 +12,10 @@ import {
 } from '@/components/ui/card'
 import { BlogSearch } from '@/components/blog/BlogSearch'
 import { CalendarIcon, ClockIcon, UserIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
-// 简化的博客文章接口
+// Simplified blog post interface
 interface SimpleBlogPost {
   url: string
   title: string
@@ -40,19 +41,20 @@ interface BlogClientProps {
 }
 
 export function BlogClient({ posts, locale, translations }: BlogClientProps) {
+  const t = useTranslations('blog.client')
   const [filteredPosts, setFilteredPosts] = useState(posts)
 
-  // 获取所有标签
+  // Get all tags
   const allTags = Array.from(new Set(posts.flatMap(post => post.tags || [])))
 
-  // 获取热门文章（这里简单按日期排序）
+  // Get featured posts (here simply sorted by date)
   const featuredPosts = posts.slice(0, 3)
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-      {/* 主要内容区域 */}
+      {/* Main content area */}
       <div className="lg:col-span-3">
-        {/* 搜索和筛选 */}
+        {/* Search and filter */}
         <div className="mb-8">
           <BlogSearch
             posts={posts}
@@ -61,17 +63,15 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
           />
         </div>
 
-        {/* 热门文章 */}
+        {/* Featured Articles */}
         {featuredPosts.length > 0 && filteredPosts.length === posts.length && (
           <section className="mb-12">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">
-                {locale === 'zh' ? '热门文章' : 'Featured Articles'}
+                {t('featuredArticles')}
               </h2>
               <p className="text-muted-foreground">
-                {locale === 'zh'
-                  ? '精选推荐文章'
-                  : 'Handpicked articles for you'}
+                {t('featuredDescription')}
               </p>
             </div>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -87,22 +87,16 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
           </section>
         )}
 
-        {/* 文章列表 */}
+        {/* Blog post list */}
         <section>
           <div className="mb-6">
             <h2 className="text-2xl font-bold mb-2">
               {filteredPosts.length === posts.length
-                ? locale === 'zh'
-                  ? '最新文章'
-                  : 'Latest Articles'
-                : locale === 'zh'
-                  ? '搜索结果'
-                  : 'Search Results'}
+                ? t('latestArticles')
+                : t('searchResults')}
             </h2>
             <p className="text-muted-foreground">
-              {locale === 'zh'
-                ? `共 ${filteredPosts.length} 篇文章`
-                : `${filteredPosts.length} article${filteredPosts.length === 1 ? '' : 's'} found`}
+              {t('articlesFound', { count: filteredPosts.length })}
             </p>
           </div>
 
@@ -122,12 +116,10 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
               <div className="mx-auto max-w-md">
                 <div className="mb-4 text-6xl">🔍</div>
                 <h3 className="mb-2 text-xl font-semibold">
-                  {locale === 'zh' ? '未找到匹配的文章' : 'No Articles Found'}
+                  {t('noArticlesFound')}
                 </h3>
                 <p className="text-muted-foreground">
-                  {locale === 'zh'
-                    ? '尝试调整搜索条件或浏览所有文章'
-                    : 'Try adjusting your search terms or browse all articles'}
+                  {t('noArticlesDescription')}
                 </p>
               </div>
             </div>
@@ -135,14 +127,12 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
         </section>
       </div>
 
-      {/* 侧边栏 */}
+      {/* Sidebar */}
       <div className="space-y-8">
-        {/* 热门标签 */}
+        {/* Popular Tags */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">
-              {locale === 'zh' ? '热门标签' : 'Popular Tags'}
-            </CardTitle>
+            <CardTitle className="text-lg">{t('popularTags')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
@@ -159,49 +149,41 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
           </CardContent>
         </Card>
 
-        {/* 文章归档 */}
+        {/* Article archive */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">
-              {locale === 'zh' ? '文章归档' : 'Archives'}
-            </CardTitle>
+            <CardTitle className="text-lg">{t('archives')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'zh' ? '2024年1月' : 'January 2024'} (3)
+                {t('january')} (3)
               </Button>
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'zh' ? '2023年12月' : 'December 2023'} (2)
+                {t('december')} (2)
               </Button>
               <Button variant="ghost" className="w-full justify-start text-sm">
-                {locale === 'zh' ? '2023年11月' : 'November 2023'} (1)
+                {t('november')} (1)
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* 订阅通知 */}
+        {/* Subscribe Notification */}
         <Card className="bg-gradient-to-br from-primary/10 to-purple-600/10">
           <CardContent className="pt-6">
             <div className="text-center">
-              <h3 className="mb-2 font-semibold">
-                {locale === 'zh' ? '订阅我们的博客' : 'Subscribe to Our Blog'}
-              </h3>
+              <h3 className="mb-2 font-semibold">{t('subscribeTitle')}</h3>
               <p className="mb-4 text-sm text-muted-foreground">
-                {locale === 'zh'
-                  ? '获取最新的技术文章和更新通知'
-                  : 'Get the latest articles and updates'}
+                {t('subscribeDescription')}
               </p>
               <div className="space-y-2">
                 <input
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t('subscribePlaceholder')}
                   className="w-full px-3 py-2 text-sm border rounded-md text-center"
                 />
-                <Button className="w-full">
-                  {locale === 'zh' ? '订阅' : 'Subscribe'}
-                </Button>
+                <Button className="w-full">{t('subscribe')}</Button>
               </div>
             </div>
           </CardContent>
@@ -211,7 +193,7 @@ export function BlogClient({ posts, locale, translations }: BlogClientProps) {
   )
 }
 
-// 特色文章卡片组件
+// Featured Article Card Component
 function FeaturedPostCard({
   post,
   locale,
@@ -258,7 +240,7 @@ function FeaturedPostCard({
   )
 }
 
-// 普通文章卡片组件
+// Featured Article Card Component
 function BlogPostCard({
   post,
   locale,

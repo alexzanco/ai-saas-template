@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { trpc } from '@/lib/trpc/client'
+import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 
 interface CheckoutButtonProps {
@@ -9,7 +10,7 @@ interface CheckoutButtonProps {
   planName: string
   monthlyPrice: number
   yearlyPrice: number
-  currency: 'USD' | 'CNY'
+  currency: 'USD' | 'EUR'
   variant?: 'default' | 'outline' | 'secondary'
   className?: string
 }
@@ -23,6 +24,7 @@ export function CheckoutButton({
   variant = 'default',
   className,
 }: CheckoutButtonProps) {
+  const t = useTranslations('payment')
   const [isYearly, setIsYearly] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -30,15 +32,15 @@ export function CheckoutButton({
     trpc.payments.createCheckoutSession.useMutation({
       onSuccess: data => {
         if (data.url) {
-          // 跳转到Stripe结账页面
+          // Jump to the Stripe checkout page
           window.location.href = data.url
         }
         setIsLoading(false)
       },
       onError: error => {
-        console.error('创建结账会话失败:', error)
+        console.error('Failed to create checkout session:', error)
         setIsLoading(false)
-        // 这里可以添加错误提示
+        // Here you can add error prompts
       },
     })
 
@@ -48,10 +50,10 @@ export function CheckoutButton({
     const durationType = isYearly ? 'yearly' : 'monthly'
 
     createCheckoutMutation.mutate({
-      priceId: planId, // 假设planId就是priceId
+      priceId: planId, // Assume planId is priceId
       planName,
       paymentMethod: 'card',
-      locale: 'zh',
+      locale: 'de',
       durationType,
     })
   }
@@ -61,7 +63,7 @@ export function CheckoutButton({
 
   return (
     <div className={className}>
-      {/* 计费周期切换 */}
+      {/* Billing cycle switching */}
       <div className="mb-4 flex items-center justify-center space-x-4">
         <button
           type="button"
@@ -72,7 +74,7 @@ export function CheckoutButton({
           }`}
           onClick={() => setIsYearly(false)}
         >
-          月付
+          {t('monthly')}
         </button>
         <button
           type="button"
@@ -83,10 +85,10 @@ export function CheckoutButton({
           }`}
           onClick={() => setIsYearly(true)}
         >
-          年付
+          {t('yearly')}
           {isYearly && (
             <span className="ml-1 text-xs bg-green-500 text-white px-1 rounded">
-              省{' '}
+              {t('save')}{' '}
               {Math.round(
                 ((monthlyPrice * 12 - yearlyPrice) / (monthlyPrice * 12)) * 100
               )}
@@ -96,24 +98,25 @@ export function CheckoutButton({
         </button>
       </div>
 
-      {/* 价格显示 */}
+      {/* Price display */}
       <div className="mb-4 text-center">
         <div className="text-3xl font-bold">
           {currencySymbol}
           {currentPrice}
         </div>
         <div className="text-sm text-muted-foreground">
-          {isYearly ? '每年' : '每月'}
+          {isYearly ? t('perYear') : t('perMonth')}
         </div>
         {isYearly && (
           <div className="text-xs text-green-600 mt-1">
-            相当于每月 {currencySymbol}
+            {t('equivalentTo')}
+            {currencySymbol}
             {(yearlyPrice / 12).toFixed(2)}
           </div>
         )}
       </div>
 
-      {/* 购买按钮 */}
+      {/* buy button */}
       <Button
         variant={variant}
         className="w-full"
@@ -143,15 +146,15 @@ export function CheckoutButton({
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            处理中...
+            {t('processing')}
           </span>
         ) : (
-          `升级到 ${planName}`
+          t('upgradeTo', { planName })
         )}
       </Button>
 
       <div className="mt-3 text-xs text-center text-muted-foreground">
-        安全支付，随时可取消
+        {t('securePayment')}
       </div>
     </div>
   )

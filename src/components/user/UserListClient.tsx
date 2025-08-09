@@ -11,7 +11,7 @@ import { UserTable } from './UserTable'
 export function UserListClient() {
   const searchParams = useSearchParams()
 
-  // 构建查询参数
+  // Build query parameters
   const params: UserQueryParams = {
     page: Number(searchParams.get('page')) || 1,
     limit: Number(searchParams.get('limit')) || 20,
@@ -31,8 +31,8 @@ export function UserListClient() {
     isLoading,
     error,
   } = trpc.users.getUsers.useQuery(params, {
-    staleTime: 2 * 60 * 1000, // 2分钟缓存
-    gcTime: 5 * 60 * 1000, // 5分钟垃圾回收
+    staleTime: 2 * 60 * 1000, // 2 minutes cache
+    gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
   })
 
   if (isLoading) {
@@ -45,7 +45,9 @@ export function UserListClient() {
         <UserListHeader />
         <Card>
           <CardContent className="p-8">
-            <div className="text-center text-destructive">加载用户列表失败</div>
+            <div className="text-center text-destructive">
+              Failed to load user list
+            </div>
           </CardContent>
         </Card>
       </div>

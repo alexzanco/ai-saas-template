@@ -15,9 +15,9 @@ import { useState } from 'react'
 interface CategoryItem {
   id: string
   name: string
-  nameZh?: string | null
+  nameDe?: string | null
   description?: string | null
-  descriptionZh?: string | null
+  descriptionDe?: string | null
   count?: number
   icon?: LucideIcon
 }
@@ -54,7 +54,7 @@ export function CategorySidebar({
   onClearFilters,
   showClearButton = false,
   stats,
-  locale = 'zh',
+  locale = 'de',
   totalCount = 0,
   allCategoriesText = '全部分类',
   allCategoriesIcon: AllIcon = Filter,
@@ -195,14 +195,14 @@ export function CategorySidebar({
                             : 'text-foreground group-hover:text-blue-600'
                         )}
                       >
-                        {locale === 'zh'
-                          ? category.nameZh || category.name
+                        {locale === 'de'
+                          ? category.nameDe || category.name
                           : category.name}
                       </div>
-                      {(category.description || category.descriptionZh) && (
+                      {(category.description || category.descriptionDe) && (
                         <div className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-tight">
-                          {locale === 'zh'
-                            ? category.descriptionZh || category.description
+                          {locale === 'de'
+                            ? category.descriptionDe || category.description
                             : category.description}
                         </div>
                       )}

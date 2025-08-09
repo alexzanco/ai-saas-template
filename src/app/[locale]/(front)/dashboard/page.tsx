@@ -18,8 +18,10 @@ import {
   TrendingUp,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 function DashboardContent() {
+  const t = useTranslations('dashboard')
   const { user } = useUser()
   const { isLoading } = useUserMembership(user?.id)
 
@@ -32,28 +34,28 @@ function DashboardContent() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            控制面板
+            {t('title')}
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">
-            欢迎回来！这里是您的个人工作台。
+            {t('welcome')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* 左侧：用户资料和会员状态 */}
+          {/* Left: User profile and membership status*/}
           <div className="lg:col-span-1 space-y-6">
             <UserProfileClient />
             <MembershipStatusClient />
           </div>
 
-          {/* 右侧：主要内容区域 */}
+          {/* Right: Main content area */}
           <div className="lg:col-span-3 space-y-6">
-            {/* 快速操作区域 */}
+            {/* Quick actions area */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <TrendingUp className="h-5 w-5 mr-2" />
-                  快速操作
+                  {t('quickActions')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -62,7 +64,7 @@ function DashboardContent() {
                     <Link href="/pricing">
                       <div className="text-center">
                         <CreditCard className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">升级计划</span>
+                        <span className="text-sm">{t('upgradePlan')}</span>
                       </div>
                     </Link>
                   </Button>
@@ -71,7 +73,7 @@ function DashboardContent() {
                     <Link href="/settings">
                       <div className="text-center">
                         <Settings className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">账户设置</span>
+                        <span className="text-sm">{t('accountSettings')}</span>
                       </div>
                     </Link>
                   </Button>
@@ -80,7 +82,7 @@ function DashboardContent() {
                     <Link href="/payment/history">
                       <div className="text-center">
                         <BarChart3 className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">支付历史</span>
+                        <span className="text-sm">{t('paymentHistory')}</span>
                       </div>
                     </Link>
                   </Button>
@@ -89,7 +91,7 @@ function DashboardContent() {
                     <Link href="/docs">
                       <div className="text-center">
                         <FileText className="h-6 w-6 mx-auto mb-2" />
-                        <span className="text-sm">查看文档</span>
+                        <span className="text-sm">{t('viewDocs')}</span>
                       </div>
                     </Link>
                   </Button>
@@ -97,7 +99,7 @@ function DashboardContent() {
               </CardContent>
             </Card>
 
-            {/* 支付历史 */}
+            {/* Payment history */}
             <PaymentHistoryClient />
           </div>
         </div>
@@ -116,7 +118,7 @@ function DashboardSkeleton() {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-1 space-y-6">
-          {/* 用户资料骨架 */}
+          {/* User profile skeleton */}
           <Card>
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center space-x-4">
@@ -129,7 +131,7 @@ function DashboardSkeleton() {
             </CardContent>
           </Card>
 
-          {/* 会员状态骨架 */}
+          {/* Member status skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-8 w-24 mb-4" />
@@ -142,7 +144,7 @@ function DashboardSkeleton() {
         </div>
 
         <div className="lg:col-span-3 space-y-6">
-          {/* 概览卡片骨架 */}
+          {/* Overview Card Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Card key={i}>
@@ -159,7 +161,7 @@ function DashboardSkeleton() {
             ))}
           </div>
 
-          {/* 快速操作骨架 */}
+          {/* Quick operation skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />
@@ -171,7 +173,7 @@ function DashboardSkeleton() {
             </CardContent>
           </Card>
 
-          {/* 支付历史骨架 */}
+          {/* Payment history skeleton */}
           <Card>
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />

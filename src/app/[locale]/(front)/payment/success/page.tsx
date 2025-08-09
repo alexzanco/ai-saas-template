@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
+import { useTranslations } from 'next-intl'
 import { ArrowRight, Calendar, CheckCircle, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -13,13 +14,14 @@ import { useSearchParams } from 'next/navigation'
 function PaymentSuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
+  const t = useTranslations('paymentSuccess')
 
   const {
     data: membershipStatus,
     isLoading,
     error,
   } = trpc.payments.getUserMembershipStatus.useQuery(undefined, {
-    staleTime: 0, // 支付成功后不缓存，确保获取最新状态
+    staleTime: 0, // Do not cache after successful payment to ensure the latest status
     gcTime: 0,
   })
 
@@ -36,69 +38,81 @@ function PaymentSuccessContent() {
 
   return (
     <div className="text-center space-y-8">
-      {/* 成功图标 */}
+      {/* Success Icon */}
       <div className="flex justify-center">
         <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
           <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400" />
         </div>
       </div>
 
-      {/* 成功消息 */}
+      {/* Success Message */}
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          支付成功！
+          {t('title')}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          感谢您的购买，您的会员已成功激活
+          {t('subtitle')}
         </p>
       </div>
 
-      {/* 会员信息卡片 */}
+      {/* Member information card */}
       {hasActiveMembership && currentPlan && membership && (
         <Card className="text-left">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              会员信息
+              {t('membershipInfo')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">会员计划</p>
+                <p className="text-sm text-muted-foreground">
+                  {t('membershipPlan')}
+                </p>
                 <p className="font-medium text-lg">
-                  {currentPlan.nameZh || currentPlan.name}
+                  {currentPlan.nameDe || currentPlan.name}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">计费周期</p>
+                <p className="text-sm text-muted-foreground">
+                  {t('billingCycle')}
+                </p>
                 <p className="font-medium">
-                  {membership.durationType === 'yearly' ? '年付' : '月付'}
+                  {membership.durationType === 'yearly'
+                    ? t('yearly')
+                    : t('monthly')}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">支付金额</p>
+                <p className="text-sm text-muted-foreground">
+                  {t('paymentAmount')}
+                </p>
                 <p className="font-medium text-lg">
                   {formatPrice(
                     Number(membership.purchaseAmount),
-                    membership.currency as 'USD' | 'CNY'
+                    membership.currency as 'USD' | 'EUR'
                   )}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">有效期</p>
+                <p className="text-sm text-muted-foreground">{t('validity')}</p>
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  <p className="font-medium">{remainingDays} 天</p>
+                  <p className="font-medium">
+                    {remainingDays} {t('days')}
+                  </p>
                 </div>
               </div>
             </div>
 
             {membership.endDate && (
               <div className="pt-4 border-t">
-                <p className="text-sm text-muted-foreground">到期时间</p>
+                <p className="text-sm text-muted-foreground">
+                  {t('expirationDate')}
+                </p>
                 <p className="font-medium">
-                  {new Date(membership.endDate).toLocaleDateString('zh-CN', {
+                  {new Date(membership.endDate).toLocaleDateString('de-DE', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -110,16 +124,16 @@ function PaymentSuccessContent() {
         </Card>
       )}
 
-      {/* 功能特性 */}
+      {/* Features */}
       {currentPlan && (
         <Card className="text-left">
           <CardHeader>
-            <CardTitle>您现在可以享受以下功能</CardTitle>
+            <CardTitle>{t('featuresTitle')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {currentPlan.featuresZh && currentPlan.featuresZh.length > 0
-                ? currentPlan.featuresZh.map((feature, index) => (
+              {currentPlan.featuresDe && currentPlan.featuresDe.length > 0
+                ? currentPlan.featuresDe.map((feature, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />
                       <span className="text-sm">{feature}</span>
@@ -136,35 +150,35 @@ function PaymentSuccessContent() {
         </Card>
       )}
 
-      {/* 操作按钮 */}
+      {/* Action button */}
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button asChild size="lg">
           <Link href="/dashboard">
-            前往仪表盘
+            {t('goToDashboard')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
 
         <Button asChild variant="outline" size="lg">
-          <Link href="/payment/history">查看支付记录</Link>
+          <Link href="/payment/history">{t('viewPaymentHistory')}</Link>
         </Button>
       </div>
 
-      {/* 支持信息 */}
+      {/* Support information */}
       <div className="text-center text-sm text-muted-foreground">
         <p>
-          如有任何问题，请{' '}
+          {t('supportText')}{' '}
           <Link href="/contact" className="text-primary hover:underline">
-            联系客服
+            {t('contactSupport')}
           </Link>
         </p>
       </div>
 
-      {/* 调试信息（仅开发环境） */}
+      {/* Debug information (only in development) */}
       {process.env.NODE_ENV === 'development' && sessionId && (
         <Card className="text-left">
           <CardHeader>
-            <CardTitle className="text-sm">调试信息</CardTitle>
+            <CardTitle className="text-sm">{t('debugInfo')}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground font-mono">
@@ -205,6 +219,7 @@ function PaymentSuccessLoading() {
 }
 
 function PaymentSuccessError() {
+  const t = useTranslations('paymentSuccess')
   return (
     <div className="text-center space-y-8">
       <div className="flex justify-center">
@@ -215,23 +230,23 @@ function PaymentSuccessError() {
 
       <div className="space-y-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          支付处理中
+          {t('paymentProcessing')}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          您的支付正在处理中，请稍后查看会员状态
+          {t('paymentProcessingSubtitle')}
         </p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
         <Button asChild size="lg">
           <Link href="/dashboard">
-            前往仪表盘
+            {t('goToDashboard')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
 
         <Button asChild variant="outline" size="lg">
-          <Link href="/pricing">返回定价页面</Link>
+          <Link href="/pricing">{t('backToPricing')}</Link>
         </Button>
       </div>
     </div>

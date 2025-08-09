@@ -29,7 +29,7 @@ interface BlogFrontmatter {
   tags?: string[]
 }
 
-// 用于客户端的简化文章数据结构
+// Simplified article data structure for client-side
 interface SimpleBlogPost {
   url: string
   title: string
@@ -47,10 +47,10 @@ type Props = {
 
 export default async function BlogPage({ params }: Props) {
   const { locale } = await params
-  const t = await getTranslations('blog')
+  const t = await getTranslations({ locale, namespace: 'blog' })
   const posts = getBlogPosts(locale)
 
-  // 转换为简化的数据结构，只包含必要的可序列化字段
+  // Convert to a simplified data structure with only necessary serializable fields
   const simplePosts: SimpleBlogPost[] = posts.map(post => {
     const frontmatter = post.data as BlogFrontmatter
     return {
@@ -67,12 +67,12 @@ export default async function BlogPage({ params }: Props) {
     }
   })
 
-  // 获取所有标签
+  // Get all tags
   const allTags = Array.from(
     new Set(simplePosts.flatMap(post => post.tags || []))
   )
 
-  // 预处理翻译文本
+  // Preprocess translation texts
   const translations = {
     title: t('title'),
     description: t('description'),
@@ -96,9 +96,7 @@ export default async function BlogPage({ params }: Props) {
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <div className="relative w-full max-w-md">
                 <Input
-                  placeholder={
-                    locale === 'zh' ? '搜索文章...' : 'Search articles...'
-                  }
+                  placeholder={t('page.searchPlaceholder')}
                   className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/70"
                 />
                 <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/70" />
@@ -107,7 +105,7 @@ export default async function BlogPage({ params }: Props) {
                 size="lg"
                 className="bg-white text-purple-600 hover:bg-white/90"
               >
-                {locale === 'zh' ? '搜索' : 'Search'}
+                {t('page.search')}
               </Button>
             </div>
           </div>
@@ -115,7 +113,7 @@ export default async function BlogPage({ params }: Props) {
       </section>
 
       <div className="container mx-auto px-4 py-16">
-        {/* 统计信息 */}
+        {/* Statistics */}
         <section className="mb-16">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <Card className="text-center">
@@ -123,9 +121,7 @@ export default async function BlogPage({ params }: Props) {
                 <div className="text-3xl font-bold text-primary">
                   {simplePosts.length}
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'zh' ? '篇文章' : 'Articles'}
-                </p>
+                <p className="text-muted-foreground">{t('page.articles')}</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -133,9 +129,7 @@ export default async function BlogPage({ params }: Props) {
                 <div className="text-3xl font-bold text-primary">
                   {allTags.length}
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'zh' ? '个标签' : 'Tags'}
-                </p>
+                <p className="text-muted-foreground">{t('page.tags')}</p>
               </CardContent>
             </Card>
             <Card className="text-center">
@@ -144,15 +138,13 @@ export default async function BlogPage({ params }: Props) {
                   <TrendingUpIcon className="h-6 w-6 text-primary" />
                   <div className="text-3xl font-bold text-primary">24k</div>
                 </div>
-                <p className="text-muted-foreground">
-                  {locale === 'zh' ? '阅读量' : 'Views'}
-                </p>
+                <p className="text-muted-foreground">{t('page.views')}</p>
               </CardContent>
             </Card>
           </div>
         </section>
 
-        {/* 博客内容 - 传递简化的数据 */}
+        {/* Blog content - Pass simplified data */}
         <BlogClient
           posts={simplePosts}
           locale={locale}
@@ -164,7 +156,7 @@ export default async function BlogPage({ params }: Props) {
             <div className="mx-auto max-w-md">
               <div className="mb-4 text-6xl">📝</div>
               <h3 className="mb-2 text-xl font-semibold">
-                {locale === 'zh' ? '暂无文章' : 'No Articles Yet'}
+                {t('noArticlesYet')}
               </h3>
               <p className="text-muted-foreground">{translations.noArticles}</p>
             </div>

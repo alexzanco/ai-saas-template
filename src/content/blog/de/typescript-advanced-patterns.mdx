@@ -1,0 +1,436 @@
+---
+title: TypeScript Erweiterte Muster und Techniken
+description: Tiefgreifende Betrachtung von TypeScripts erweiterten Funktionen und praktischen Mustern
+author: AI SaaS Template Team
+date: 2024-01-25
+tags: [TypeScript, JavaScript, Type System]
+---
+
+# TypeScript Erweiterte Muster und Techniken
+
+TypeScript ist mehr als nur Typ-Annotationen für JavaScript – es bietet ein mächtiges Typsystem und erweiterte Funktionen. Dieser Artikel erkundet einige praktische erweiterte TypeScript-Muster.
+
+## Utility-Typen
+
+### 1. Pick und Omit
+
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: Date;
+}
+
+// Nur bestimmte Felder auswählen
+type PublicUser = Pick<User, 'id' | 'name' | 'email'>;
+
+// Bestimmte Felder ausschließen
+type CreateUserInput = Omit<User, 'id' | 'createdAt'>;
+
+// Praktische Verwendung
+function getPublicUserInfo(user: User): PublicUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  };
+}
+```
+
+### 2. Partial und Required
+
+```typescript
+interface Config {
+  apiUrl: string;
+  timeout: number;
+  retries: number;
+}
+
+// Alle Felder sind optional
+type PartialConfig = Partial<Config>;
+
+// Alle Felder sind erforderlich
+type RequiredConfig = Required<PartialConfig>;
+
+function updateConfig(config: PartialConfig): void {
+  // Nur bereitgestellte Felder aktualisieren
+}
+```
+
+## Bedingte Typen
+
+### Grundlegende Bedingte Typen
+
+```typescript
+type IsString<T> = T extends string ? true : false;
+
+type Test1 = IsString<string>; // true
+type Test2 = IsString<number>; // false
+
+// Praktische bedingte Typen
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+type ApiResponse<T> = T extends string
+  ? { message: T }
+  : T extends number
+  ? { code: T }
+  : { data: T };
+```
+
+### Distributive Bedingte Typen
+
+```typescript
+type ToArray<T> = T extends any ? T[] : never;
+
+type StringOrNumberArray = ToArray<string | number>;
+// Ergebnis: string[] | number[]
+
+// Typen filtern
+type Filter<T, U> = T extends U ? T : never;
+
+type StringsOnly = Filter<string | number | boolean, string>;
+// Ergebnis: string
+```
+
+## Mapped Types (Abgebildete Typen)
+
+### Grundlegende Mapped Types
+
+```typescript
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+type Optional<T> = {
+  [P in keyof T]?: T[P];
+};
+
+// Präfix hinzufügen
+type Prefixed<T, P extends string> = {
+  [K in keyof T as `${P}${string & K}`]: T[K];
+};
+
+interface User {
+  name: string;
+  age: number;
+}
+
+type PrefixedUser = Prefixed<User, 'user_'>;
+// Ergebnis: { user_name: string; user_age: number; }
+```
+
+### Erweiterte Mapped Types
+
+```typescript
+// Tiefgreifend readonly
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+
+// Schlüssel-Wert-Paar-Transformation
+type Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
+
+// Event-Handler-Typen erstellen
+type EventHandlers<T> = {
+  [K in keyof T as `on${Capitalize<string & K>}`]: (value: T[K]) => void;
+};
+
+interface FormData {
+  name: string;
+  email: string;
+  age: number;
+}
+
+type FormHandlers = EventHandlers<FormData>;
+// Ergebnis: {
+//   onName: (value: string) => void;
+//   onEmail: (value: string) => void;
+//   onAge: (value: number) => void;
+// }
+```
+
+## Template Literal Types
+
+### Grundlegende Verwendung
+
+```typescript
+type Greeting = `Hello, ${string}!`;
+
+const greeting1: Greeting = "Hello, World!"; // ✅
+const greeting2: Greeting = "Hi there!"; // ❌
+
+// Kombinierte Typen
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type Endpoint = `/api/${string}`;
+type ApiCall = `${HttpMethod} ${Endpoint}`;
+
+const apiCall: ApiCall = "GET /api/users"; // ✅
+```
+
+### Erweiterte Template-Typen
+
+```typescript
+// Pfadparameter-Extraktion
+type ExtractParams<T extends string> = T extends `${string}:${infer P}/${infer Rest}`
+  ? P | ExtractParams<Rest>
+  : T extends `${string}:${infer P}`
+  ? P
+  : never;
+
+type Params = ExtractParams<'/users/:id/posts/:postId'>;
+// Ergebnis: 'id' | 'postId'
+
+// SQL Query Builder
+type SelectQuery<T, K extends keyof T> = `SELECT ${K extends string ? K : never} FROM ${string}`;
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+type UserQuery = SelectQuery<User, 'name' | 'email'>;
+// Ergebnis: 'SELECT name FROM string' | 'SELECT email FROM string'
+```
+
+## Erweiterte Funktionstypen
+
+### Funktionsüberladung
+
+```typescript
+interface ApiClient {
+  request(method: 'GET', url: string): Promise<any>;
+  request(method: 'POST', url: string, data: any): Promise<any>;
+  request(method: 'PUT', url: string, data: any): Promise<any>;
+  request(method: 'DELETE', url: string): Promise<any>;
+}
+
+class HttpClient implements ApiClient {
+  async request(method: string, url: string, data?: any): Promise<any> {
+    // Implementierungslogik
+  }
+}
+```
+
+### Generische Einschränkungen
+
+```typescript
+interface Lengthwise {
+  length: number;
+}
+
+function logLength<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+logLength("hello"); // ✅
+logLength([1, 2, 3]); // ✅
+logLength(123); // ❌ Keine length-Eigenschaft
+
+// Schlüssel-Einschränkungen
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+const person = { name: "Alice", age: 30 };
+const name = getProperty(person, "name"); // string
+const age = getProperty(person, "age"); // number
+```
+
+## Decorator-Muster
+
+### Klassen-Decorators
+
+```typescript
+function Entity(tableName: string) {
+  return function <T extends { new (...args: any[]): {} }>(constructor: T) {
+    return class extends constructor {
+      tableName = tableName;
+    };
+  };
+}
+
+@Entity('users')
+class User {
+  constructor(public name: string) {}
+}
+
+// Methoden-Decorators
+function Log(target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  const method = descriptor.value;
+  
+  descriptor.value = function (...args: any[]) {
+    console.log(`Aufruf von ${propertyName} mit Argumenten:`, args);
+    const result = method.apply(this, args);
+    console.log(`Ergebnis:`, result);
+    return result;
+  };
+}
+
+class Calculator {
+  @Log
+  add(a: number, b: number): number {
+    return a + b;
+  }
+}
+```
+
+## Type Guards (Typ-Wächter)
+
+### Benutzerdefinierte Type Guards
+
+```typescript
+interface Cat {
+  type: 'cat';
+  meow(): void;
+}
+
+interface Dog {
+  type: 'dog';
+  bark(): void;
+}
+
+type Animal = Cat | Dog;
+
+// Typ-Prädikat
+function isCat(animal: Animal): animal is Cat {
+  return animal.type === 'cat';
+}
+
+function makeSound(animal: Animal) {
+  if (isCat(animal)) {
+    animal.meow(); // TypeScript weiß, dass dies Cat ist
+  } else {
+    animal.bark(); // TypeScript weiß, dass dies Dog ist
+  }
+}
+
+// Assertion-Funktion
+function assertIsNumber(value: unknown): asserts value is number {
+  if (typeof value !== 'number') {
+    throw new Error('Zahl erwartet');
+  }
+}
+
+function processValue(value: unknown) {
+  assertIsNumber(value);
+  // Hier weiß TypeScript, dass value eine Zahl ist
+  console.log(value.toFixed(2));
+}
+```
+
+## Modul-Deklarationen und Namespaces
+
+### Ambient-Deklarationen
+
+```typescript
+// global.d.ts
+declare global {
+  interface Window {
+    gtag: (command: string, ...args: any[]) => void;
+  }
+  
+  var ENV: 'development' | 'production' | 'test';
+}
+
+// Modul-Deklarationen
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}
+
+declare module 'my-library' {
+  export function doSomething(value: string): number;
+}
+```
+
+### Namespaces
+
+```typescript
+namespace Utils {
+  export namespace String {
+    export function capitalize(str: string): string {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+    
+    export function truncate(str: string, length: number): string {
+      return str.length > length ? str.slice(0, length) + '...' : str;
+    }
+  }
+  
+  export namespace Array {
+    export function unique<T>(arr: T[]): T[] {
+      return [...new Set(arr)];
+    }
+  }
+}
+
+// Verwendung
+const capitalized = Utils.String.capitalize('hello');
+const uniqueItems = Utils.Array.unique([1, 2, 2, 3]);
+```
+
+## Praktische Anwendungsbeispiele
+
+### Typsichere API-Client
+
+```typescript
+interface ApiEndpoints {
+  '/users': {
+    GET: { response: User[] };
+    POST: { body: CreateUserInput; response: User };
+  };
+  '/users/:id': {
+    GET: { response: User };
+    PUT: { body: UpdateUserInput; response: User };
+    DELETE: { response: void };
+  };
+}
+
+type ExtractPath<T extends string> = T extends `${infer Path}/:${string}`
+  ? Path
+  : T;
+
+class TypedApiClient {
+  async request<
+    Path extends keyof ApiEndpoints,
+    Method extends keyof ApiEndpoints[Path]
+  >(
+    method: Method,
+    path: Path,
+    options?: ApiEndpoints[Path][Method] extends { body: infer B }
+      ? { body: B }
+      : {}
+  ): Promise<
+    ApiEndpoints[Path][Method] extends { response: infer R } ? R : never
+  > {
+    // Implementierungslogik
+    throw new Error('Nicht implementiert');
+  }
+}
+
+// Vollständige Typsicherheit bei der Verwendung
+const client = new TypedApiClient();
+const users = await client.request('GET', '/users'); // User[]
+const user = await client.request('POST', '/users', {
+  body: { name: 'Alice', email: 'alice@example.com' }
+}); // User
+```
+
+## Zusammenfassung
+
+TypeScripts erweiterte Funktionen bieten uns mächtige Typsystem-Werkzeuge:
+
+1. **Utility-Typen**: Vereinfachen häufige Typ-Operationen
+2. **Bedingte Typen**: Typ-Auswahl basierend auf Bedingungen
+3. **Mapped Types**: Typ-Transformation und -Manipulation
+4. **Template Literals**: Präzise Kontrolle über String-Typen
+5. **Type Guards**: Laufzeit-Typprüfung
+6. **Decorators**: Metaprogrammierung-Unterstützung
+
+Die Beherrschung dieser erweiterten Muster ermöglicht es Ihnen, sichereren, wartbareren TypeScript-Code zu schreiben und die Vorteile des Typsystems voll auszuschöpfen.

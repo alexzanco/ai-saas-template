@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { useAuth, useUser } from '@clerk/nextjs'
 import { motion, useMotionValue } from 'framer-motion'
 import { Check, Crown, Loader2, Sparkles, Star, Zap } from 'lucide-react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -32,17 +32,18 @@ export default function PricingSection({
   const { isSignedIn } = useAuth()
   const { user } = useUser()
   const locale = useLocale()
+  const t = useTranslations('pricing')
 
-  // 状态管理
+  // Status management
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null)
 
-  // 新增：期限类型选择状态
+  // New: Duration type selection status
   const [durationType, setDurationType] = useState<'monthly' | 'yearly'>(
     'monthly'
   )
   const [isYearly, setIsYearly] = useState(false)
 
-  // 3D交互效果
+  // 3D interaction effect
   const sectionRef = useRef<HTMLElement>(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -61,38 +62,29 @@ export default function PricingSection({
         if (data.url) {
           window.location.href = data.url
         } else {
-          toast.error(
-            locale === 'zh'
-              ? '支付链接生成失败，请重试'
-              : 'Payment link generation failed, please try again'
-          )
+          toast.error(t('paymentLinkError'))
         }
         setCheckoutLoading(null)
       },
       onError: error => {
         console.error('Checkout error:', error)
-        toast.error(
-          error.message ||
-            (locale === 'zh'
-              ? '创建支付会话失败，请重试'
-              : 'Failed to create checkout session, please try again')
-        )
+        toast.error(error.message || t('checkoutSessionError'))
         setCheckoutLoading(null)
       },
     })
 
-  // 切换期限类型
+  // Switch duration type
   useEffect(() => {
     setDurationType(isYearly ? 'yearly' : 'monthly')
   }, [isYearly])
 
-  // 计算用户会员信息
+  // Calculate user membership information
   const hasActiveMembership = !!membershipStatus?.hasActiveMembership
   const currentPlan = membershipStatus?.currentPlan
   const remainingDays = membershipStatus?.remainingDays || 0
   const isExpired = membershipStatus?.isExpired ?? true
 
-  // 鼠标移动处理
+  // Mouse movement handling
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!sectionRef.current) return
 
@@ -104,51 +96,64 @@ export default function PricingSection({
     mouseY.set((e.clientY - centerY) / rect.height)
   }
 
-  // 根据期限类型和语言环境获取价格显示
+  // Get price display based on term type and locale
   const getPlanPrice = (plan: any) => {
-    if (locale === 'zh') {
-      // 中文版本显示人民币
+    if (locale === 'de') {
+      // The German version shows Euros
       if (durationType === 'yearly') {
-        const price = plan.priceCNYYearly
+        const price = plan.priceEURYearly
         return price
-          ? `¥${price}`
-          : `¥${(Number(plan.priceUSDYearly) * 7.2).toFixed(0)}`
+          ? `${price}€`
+          : `${(Number(plan.priceUSDEYearly) * 0.85).toFixed(0)}€`
       }
-      const price = plan.priceCNYMonthly
+      const price = plan.priceEURMonthly
       return price
-        ? `¥${price}`
-        : `¥${(Number(plan.priceUSDMonthly) * 7.2).toFixed(0)}`
+        ? `${price}€`
+        : `${(Number(plan.priceUSDEMonthly) * 0.85).toFixed(0)}€`
     }
-    // 英文版本显示美元
+    // The English version shows US dollars
     if (durationType === 'yearly') {
       return `$${plan.priceUSDYearly || '0'}`
     }
     return `$${plan.priceUSDMonthly || '0'}`
   }
 
-  // 获取期限文本
+  // get duration text
   const getDurationText = () => {
     if (durationType === 'yearly') {
-      return locale === 'zh' ? '年' : 'year'
+      return t('year')
     }
-    return locale === 'zh' ? '月' : 'month'
+    return t('month')
   }
 
-  // 计算年付节省金额
+  // Calculate annual savings
   const getYearlySavings = (plan: any) => {
-    if (!(plan.priceUSDYearly && plan.priceUSDMonthly)) {
-      return null
+    if (locale === 'de') {
+      if (!(plan.priceEURYearly && plan.priceEURMonthly)) {
+        return null
+      }
+
+      const monthlyTotal = Number(plan.priceEURMonthly) * 12
+      const yearlyPrice = Number(plan.priceEURYearly)
+      const savings = monthlyTotal - yearlyPrice
+      const savingsPercent = Math.round((savings / monthlyTotal) * 100)
+
+      return { amount: savings, percent: savingsPercent }
+    } else {
+      if (!(plan.priceUSDYearly && plan.priceUSDMonthly)) {
+        return null
+      }
+
+      const monthlyTotal = Number(plan.priceUSDMonthly) * 12
+      const yearlyPrice = Number(plan.priceUSDYearly)
+      const savings = monthlyTotal - yearlyPrice
+      const savingsPercent = Math.round((savings / monthlyTotal) * 100)
+
+      return { amount: savings, percent: savingsPercent }
     }
-
-    const monthlyTotal = Number(plan.priceUSDMonthly) * 12
-    const yearlyPrice = Number(plan.priceUSDYearly)
-    const savings = monthlyTotal - yearlyPrice
-    const savingsPercent = Math.round((savings / monthlyTotal) * 100)
-
-    return { amount: savings, percent: savingsPercent }
   }
 
-  // 获取计划图标
+  // Get plan icon
   const getPlanIcon = (planName: string) => {
     switch (planName.toLowerCase()) {
       case 'free':
@@ -163,12 +168,12 @@ export default function PricingSection({
     }
   }
 
-  // 检查是否为当前使用的计划
+  // Check if it is the current plan
   const isCurrentPlan = (plan: any) => {
     return hasActiveMembership && currentPlan?.id === plan.id
   }
 
-  // 检查是否为免费计划
+  // Check if it is a free plan
   const isFreePlan = (plan: any) => {
     return (
       plan.name.toLowerCase() === 'free' ||
@@ -176,7 +181,7 @@ export default function PricingSection({
     )
   }
 
-  // 处理会员购买
+  // Handle membership purchase
   const handlePurchase = async (plan: any) => {
     if (!isSignedIn) {
       window.location.href = `/${locale}/auth/sign-in`
@@ -184,35 +189,31 @@ export default function PricingSection({
     }
 
     if (isFreePlan(plan)) {
-      toast.info(
-        locale === 'zh'
-          ? '免费计划无需购买，注册即可使用'
-          : 'Free plan does not need to be purchased, register to use'
-      )
+      toast.info(t('freePlanToast'))
       return
     }
 
     if (isCurrentPlan(plan)) {
-      toast.info(`您已经是${plan.nameZh || plan.name}会员`)
+      toast.info(t('alreadyMemberToast', { planName: plan.name }))
       return
     }
 
-    // 根据期限类型和语言环境选择价格ID
+    // Select price ID based on term type and locale
     let priceId: string
     let paymentMethod: string
 
-    if (locale === 'zh') {
-      // 中文版本：使用人民币价格ID，支持支付宝和信用卡
+    if (locale === 'de') {
+      // German version: Uses Euro price ID, supports credit card
       if (durationType === 'yearly') {
         priceId =
-          plan.stripePriceIdCNYYearly || plan.stripePriceIdUSDYearly || ''
+          plan.stripePriceIdEURYearly || plan.stripePriceIdUSDYearly || ''
       } else {
         priceId =
-          plan.stripePriceIdCNYMonthly || plan.stripePriceIdUSDMonthly || ''
+          plan.stripePriceIdEURMonthly || plan.stripePriceIdUSDMonthly || ''
       }
-      paymentMethod = 'alipay' // 中文版本优先使用支付宝
+      paymentMethod = 'card' // The German version uses credit cards
     } else {
-      // 英文版本：使用美元价格ID，支付方式为信用卡
+      // English version: Uses USD price ID, payment method is credit card
       if (durationType === 'yearly') {
         priceId = plan.stripePriceIdUSDYearly || ''
       } else {
@@ -227,11 +228,7 @@ export default function PricingSection({
         durationType,
         paymentMethod,
       })
-      toast.error(
-        locale === 'zh'
-          ? '价格配置错误，请联系客服'
-          : 'Price configuration error, please contact customer service'
-      )
+      toast.error(t('priceConfigError'))
       return
     }
 
@@ -250,8 +247,8 @@ export default function PricingSection({
         priceId,
         planName: plan.name,
         durationType,
-        paymentMethod: paymentMethod as 'card' | 'alipay',
-        locale: locale as 'zh' | 'en',
+        paymentMethod: paymentMethod as 'card',
+        locale: locale as 'de' | 'en',
       })
     } catch (error) {
       // Error handling is done in the mutation's onError callback
@@ -259,42 +256,40 @@ export default function PricingSection({
     }
   }
 
-  // 获取按钮文本
+  // Get button text
   const getButtonText = (plan: any) => {
     if (isFreePlan(plan)) {
-      return locale === 'zh' ? '免费使用' : 'Free to use'
+      return t('freeToUse')
     }
 
     if (isCurrentPlan(plan)) {
-      return locale === 'zh'
-        ? `当前计划 (还有${remainingDays}天)`
-        : `Current plan (remaining ${remainingDays} days)`
+      return t('currentPlanButton', { days: remainingDays })
     }
 
     if (hasActiveMembership) {
-      return locale === 'zh'
-        ? `续费${durationType === 'yearly' ? '年' : '月'}度会员`
-        : `Renew ${durationType === 'yearly' ? 'year' : 'month'} membership`
+      return t('renewMembership', {
+        duration: durationType === 'yearly' ? t('year') : t('month'),
+      })
     }
 
-    return locale === 'zh'
-      ? `购买${durationType === 'yearly' ? '年' : '月'}度会员`
-      : `Buy ${durationType === 'yearly' ? 'year' : 'month'} membership`
+    return t('buyMembership', {
+      duration: durationType === 'yearly' ? t('year') : t('month'),
+    })
   }
 
-  // 获取按钮状态
+  // Get button status
   const isButtonDisabled = (plan: any) => {
     return checkoutLoading === plan.name || (isCurrentPlan(plan) && !isExpired)
   }
 
-  // 获取有效计划 - 年付时保留免费计划
+  // Get valid plans - keep free plan for yearly payment
   const getValidPlans = () => {
     if (!plans) return []
 
     if (durationType === 'yearly') {
       return plans.filter(
         (plan: any) =>
-          // 保留免费计划或有年付价格的计划
+          // Stay on the free plan or a plan with annual pricing
           isFreePlan(plan) ||
           (plan.priceUSDYearly && Number(plan.priceUSDYearly) > 0)
       )
@@ -302,7 +297,7 @@ export default function PricingSection({
     return plans
   }
 
-  // 加载骨架组件
+  // Loading skeleton component
   const LoadingSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
       {Array.from({ length: 3 }).map((_, index) => (
@@ -344,7 +339,7 @@ export default function PricingSection({
       transition={{ duration: 0.8 }}
     >
       <div className="max-w-8xl mx-auto relative z-10">
-        {/* 标题部分 */}
+        {/* title part */}
         {showTitle && (
           <motion.div
             className="text-center mb-16"
@@ -353,11 +348,11 @@ export default function PricingSection({
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {locale === 'zh' ? '选择适合您的计划' : 'Choose Your Plan'}
+              {t('title')}
             </h2>
             {showDescription && (
               <>
-                {/* 期限类型选择器 */}
+                {/* Term Type Selector */}
                 <div className="flex items-center justify-center mb-6">
                   <Card className="p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
                     <div className="flex items-center gap-6">
@@ -370,7 +365,7 @@ export default function PricingSection({
                               : 'text-gray-500'
                           )}
                         >
-                          {locale === 'zh' ? '月付' : 'Monthly'}
+                          {t('monthly')}
                         </span>
                         <Switch
                           checked={isYearly}
@@ -385,13 +380,13 @@ export default function PricingSection({
                               : 'text-gray-500'
                           )}
                         >
-                          {locale === 'zh' ? '年付' : 'Yearly'}
+                          {t('yearly')}
                         </span>
                       </div>
                       {isYearly && (
                         <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'zh' ? '节省高达20%' : 'Save up to 20%'}
+                          {t('save20')}
                         </Badge>
                       )}
                     </div>
@@ -402,7 +397,7 @@ export default function PricingSection({
           </motion.div>
         )}
 
-        {/* 定价卡片 */}
+        {/* Pricing Cards */}
         {plansLoading ? (
           <LoadingSkeleton />
         ) : (
@@ -427,17 +422,17 @@ export default function PricingSection({
                     transition: { duration: 0.2 },
                   }}
                 >
-                  {/* 标签系统 - 避免重叠 */}
+                  {/* Tag System - Avoid Overlap */}
                   {plan.isPopular && !isCurrentPlan(plan) && (
                     <div className="absolute top-0 right-4 transform -translate-y-1/2 z-10">
                       <Badge className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 shadow-lg">
                         <Star className="w-3 h-3 mr-1" />
-                        {locale === 'zh' ? '推荐' : 'Popular'}
+                        {t('mostPopular')}
                       </Badge>
                     </div>
                   )}
 
-                  {/* 年付节省标签 */}
+                  {/* Annual payment savings tag */}
                   {isYearly &&
                     savings &&
                     savings.percent > 0 &&
@@ -445,25 +440,23 @@ export default function PricingSection({
                       <div className="absolute top-0 left-4 transform -translate-y-1/2 z-10">
                         <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 shadow-lg">
                           <Sparkles className="w-3 h-3 mr-1" />
-                          {locale === 'zh'
-                            ? `节省${savings.percent}%`
-                            : `Save ${savings.percent}%`}
+                          {t('savePercent', { percent: savings.percent })}
                         </Badge>
                       </div>
                     )}
 
-                  {/* 当前计划标签 - 优先级最高 */}
+                  {/* Current Plan Label - Highest Priority */}
                   {isCurrentPlan(plan) && (
                     <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20">
                       <Badge className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-1 shadow-lg">
                         <Check className="w-3 h-3 mr-1" />
-                        {locale === 'zh' ? '当前计划' : 'Current plan'}
+                        {t('currentPlan')}
                       </Badge>
                     </div>
                   )}
 
                   <div className="p-8">
-                    {/* 计划头部 */}
+                    {/* plan head */}
                     <div className="flex items-center gap-3 mb-6">
                       <div
                         className={cn(
@@ -477,17 +470,17 @@ export default function PricingSection({
                       </div>
                       <div>
                         <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                          {locale === 'zh' ? plan.nameZh : plan.name}
+                          {locale === 'de' ? plan.nameDe : plan.name}
                         </h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          {locale === 'zh'
-                            ? plan.descriptionZh
+                          {locale === 'de'
+                            ? plan.descriptionDe
                             : plan.description}
                         </p>
                       </div>
                     </div>
 
-                    {/* 价格 */}
+                    {/* price */}
                     <div className="mb-6">
                       <div className="flex items-baseline gap-2">
                         <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">
@@ -499,22 +492,25 @@ export default function PricingSection({
                       </div>
                       {!isFreePlan(plan) && (
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          {durationType === 'yearly' ? '365天' : '30天'}{' '}
-                          {locale === 'zh' ? '会员权限' : 'membership rights'}
+                          {t('membershipDays', {
+                            days: durationType === 'yearly' ? 365 : 30,
+                          })}
                         </p>
                       )}
                       {isYearly && savings && savings.percent > 0 && (
                         <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-                          {locale === 'zh' ? '相比月付节省' : 'Save'} $
-                          {savings.amount.toFixed(2)}
+                          {t('saveAmount', {
+                            currency: locale === 'de' ? '€' : '$',
+                            amount: savings.amount.toFixed(2),
+                          })}
                         </p>
                       )}
                     </div>
 
-                    {/* 功能列表 */}
+                    {/* Feature list */}
                     <ul className="space-y-3 mb-8">
                       {(
-                        (locale === 'zh' ? plan.featuresZh : plan.features) ||
+                        (locale === 'de' ? plan.featuresDe : plan.features) ||
                         []
                       ).map((feature: string, featureIndex: number) => (
                         <li
@@ -529,7 +525,7 @@ export default function PricingSection({
                       ))}
                     </ul>
 
-                    {/* 购买按钮 */}
+                    {/* buy button */}
                     <Button
                       className={cn(
                         'w-full h-12 font-semibold transition-all duration-200',
@@ -545,22 +541,18 @@ export default function PricingSection({
                       {checkoutLoading === plan.name ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          {locale === 'zh'
-                            ? '创建支付会话...'
-                            : 'Creating payment session...'}
+                          {t('creatingSession')}
                         </>
                       ) : (
                         getButtonText(plan)
                       )}
                     </Button>
 
-                    {/* 额外信息 */}
+                    {/* Additional information */}
                     {!isFreePlan(plan) && (
                       <div className="mt-4 text-center">
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {locale === 'zh'
-                            ? '支持人民币付款，信用卡和支付宝'
-                            : 'Secure payment with Stripe'}
+                          {t('paymentNote')}
                         </p>
                       </div>
                     )}

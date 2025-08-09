@@ -1,5 +1,5 @@
 /**
- * 通用分页组件
+ * Universal paging component
  */
 
 import { Button } from '@/components/ui/button'
@@ -54,7 +54,7 @@ export function AdminPagination({
       rangeWithDots.push(totalPages)
     }
 
-    // 去重
+    // Remove duplicates
     return Array.from(new Set(rangeWithDots))
   }
 
@@ -64,9 +64,8 @@ export function AdminPagination({
     <div className="flex items-center justify-between">
       {showInfo && totalCount && (
         <div className="text-sm text-muted-foreground">
-          显示第 {(currentPage - 1) * pageSize + 1} -{' '}
-          {Math.min(currentPage * pageSize, totalCount)} 条， 共 {totalCount}{' '}
-          条记录
+          Showing {(currentPage - 1) * pageSize + 1} -{' '}
+          {Math.min(currentPage * pageSize, totalCount)} of {totalCount} records
         </div>
       )}
 
@@ -79,7 +78,7 @@ export function AdminPagination({
           className="flex items-center gap-1"
         >
           <ChevronLeft className="h-4 w-4" />
-          上一页
+          Previous
         </Button>
 
         {visiblePages.map((page, index) => (
@@ -106,7 +105,7 @@ export function AdminPagination({
           disabled={currentPage >= totalPages}
           className="flex items-center gap-1"
         >
-          下一页
+          Next
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>

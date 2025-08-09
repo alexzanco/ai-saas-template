@@ -1,13 +1,7 @@
 {
-  "LocaleSwitcher": {
-    "zh": "Chinese",
-    "en": "English",
-    "label": "Language"
-  },
-
   "locale": {
-    "zh": "Chinese",
     "en": "English",
+    "de": "German",
     "label": "Language",
     "professional": "Professional",
     "pro": "Pro",
@@ -15,7 +9,8 @@
     "switchTheme": "Toggle theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "theme": "Theme"
   },
   "navigation": {
     "home": "Home",
@@ -29,7 +24,8 @@
     "adminPanel": "Admin Panel",
     "signOut": "Sign Out",
     "blogs": "Blog",
-    "docs": "Documentation"
+    "docs": "Documentation",
+    "membershipCenter": "Membership Center"
   },
 
   "navbar": {
@@ -75,14 +71,43 @@
     "backToList": "Back to Blog",
     "shareArticle": "Share this article",
     "backToBlog": "Back to Blog",
-    "noArticles": "No articles found"
+    "noArticles": "No articles found",
+    "search": {
+      "placeholder": "Search articles by title, description or author...",
+      "filterByTags": "Filter by tags",
+      "clearFilters": "Clear filters",
+      "foundArticles": "Found {count} article",
+      "filtersApplied": "Filters applied",
+      "tags": "{count} tag | {count} tags"
+    },
+    "client": {
+      "featuredArticles": "Featured Articles",
+      "featuredDescription": "Handpicked articles for you",
+      "latestArticles": "Latest Articles",
+      "searchResults": "Search Results",
+      "articlesFound": "{count} article found",
+      "noArticlesFound": "No Articles Found",
+      "noArticlesDescription": "Try adjusting your search terms or browse all articles",
+      "popularTags": "Popular Tags",
+      "archives": "Archives",
+      "january": "January 2024",
+      "december": "December 2023",
+      "november": "November 2023",
+      "subscribeTitle": "Subscribe to Our Blog",
+      "subscribeDescription": "Get the latest articles and updates",
+      "subscribePlaceholder": "your@email.com",
+      "subscribe": "Subscribe"
+    },
+    "page": {
+      "searchPlaceholder": "Search articles...",
+      "search": "Search",
+      "articles": "Articles",
+      "tags": "Tags",
+      "views": "Views",
+      "noArticlesYet": "No Articles Yet"
+    }
   },
 
-  "themeConfig": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
   "app": {
     "name": "AI Saas",
     "textPro": "Pro"
@@ -271,18 +296,11 @@
       "yearly": "Yearly",
       "selected": "Selected",
       "mostPopular": "Most Popular"
-    },
-    "processing": "Processing...",
-    "upgrading": "Upgrading...",
-    "billingNote": "All plans include SSL and 24/7 professional support.",
-    "notAvailable": "Not Available",
-    "upgradeOnly": "Upgrade Only"
+    }
   },
-
   "search": {
     "noResults": "No relevant content found."
   },
-
   "auth": {
     "signIn": {
       "title": "Welcome Back",
@@ -387,7 +405,47 @@
       "syncingUser": "Syncing user information...",
       "syncSuccess": "User information synced successfully",
       "syncError": "Sync failed, retrying...",
-      "redirecting": "Login successful, redirecting..."
+      "redirecting": "Login successful, redirecting...",
+      "authenticatingTitle": "Verifying Login",
+      "authenticatingDescription": "Please wait while we securely complete your login...",
+      "authenticatingStatus": "Verifying",
+      "redirectingTitle": "Login Successful!",
+      "redirectingDescription": "Redirecting to homepage in {countdown} seconds...",
+      "redirectingButton": "Redirect Now",
+      "errorTitle": "Login is taking longer than usual",
+      "errorDescription": "Please wait or try refreshing the page.",
+      "errorButton": "Back to Login"
+    },
+    "profileForm": {
+      "loading": "Loading...",
+      "title": "Edit Profile",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "theme": "Theme",
+      "themePlaceholder": "Select a theme",
+      "language": "Language",
+      "languagePlaceholder": "Select a language",
+      "currency": "Currency",
+      "currencyPlaceholder": "Select a currency",
+      "updateSuccess": "Profile updated successfully!",
+      "updateError": "Failed to update profile, please try again",
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "userProfile": {
+      "loadError": "Failed to load user information",
+      "userNotFound": "User information not found",
+      "title": "User Profile",
+      "nameNotSet": "Name not set",
+      "joinDate": "Join Date",
+      "lastLogin": "Last Login",
+      "neverLoggedIn": "Never logged in",
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "disabled": "Disabled",
+      "languagePreference": "Language Preference",
+      "english": "English",
+      "german": "German"
     }
   },
 
@@ -399,7 +457,7 @@
     "year": "year",
     "month": "month",
     "save20": "Save up to 20%",
-    "saveAmount": "Save {amount}",
+    "saveAmount": "Save {currency}{amount}",
     "mostPopular": "Most Popular",
     "currentPlan": "Current Plan",
     "getStarted": "Get Started",
@@ -422,6 +480,19 @@
     "freeTrial": "Instant access",
     "securePayment": "Secure Payment",
     "instantAccess": "Instant Access",
+    "paymentLinkError": "Payment link generation failed, please try again",
+    "checkoutSessionError": "Failed to create checkout session, please try again",
+    "freePlanToast": "Free plan does not need to be purchased, register to use",
+    "alreadyMemberToast": "You are already a member of {planName}",
+    "priceConfigError": "Price configuration error, please contact customer service",
+    "freeToUse": "Free to use",
+    "currentPlanButton": "Current plan (remaining {days} days)",
+    "renewMembership": "Renew {duration} membership",
+    "buyMembership": "Buy {duration} membership",
+    "savePercent": "Save {percent}%",
+    "membershipDays": "{days} days membership rights",
+    "creatingSession": "Creating payment session...",
+    "paymentNote": "Secure payment with Stripe",
     "page": {
       "badge": "Subscription Plans",
       "title": "Choose the Right Plan for You",
@@ -498,6 +569,24 @@
         "back": "Go Back"
       },
       "adminContact": "To obtain administrator permissions, please contact the system administrator"
+    },
+    "errorBoundary": {
+      "title": "Page Error",
+      "description": "Sorry, the page encountered an unexpected error. We have logged this issue.",
+      "errorIdLabel": "Error ID:",
+      "viewDetails": "View Error Details",
+      "errorMessageLabel": "Error Message:",
+      "errorStackLabel": "Error Stack:",
+      "retryButton": "Retry",
+      "refreshButton": "Refresh Page",
+      "goHomeButton": "Back to Home",
+      "copyErrorButton": "Copy Error Info",
+      "supportMessage": "If the problem persists, please contact technical support and provide the Error ID.",
+      "workflow": {
+        "title": "Workflow Load Failed",
+        "description": "The workflow module encountered an error, please refresh the page to try again.",
+        "refreshButton": "Refresh Page"
+      }
     }
   },
   "user": {
@@ -514,7 +603,8 @@
   "footer": {
     "brand": {
       "name": "AI SaaS Template",
-      "description": "Professional AI SaaS application development template, providing complete user authentication, payment integration, multi-language support and modern UI components."
+      "description": "Professional AI SaaS application development template, providing complete user authentication, payment integration, multi-language support and modern UI components.",
+      "slogan": "A modern AI SAAS platform built with Next.js 15 and React 19"
     },
     "links": {
       "product": {
@@ -561,7 +651,8 @@
       "error": "Subscription failed, please try again."
     },
     "copyright": "© {year} AI SaaS Template. All rights reserved.",
-    "madeWith": "Made with ❤️ for developers"
+    "madeWith": "Made with ❤️ for developers",
+    "copyrightText": "© 2024 AI SAAS. All rights reserved."
   },
 
   "Docs": {
@@ -573,6 +664,488 @@
     "title": "Component Library",
     "description": "Explore our carefully designed component collection, each optimized for direct use in your projects",
     "viewComponents": "View components",
-    "backToBlocks": "Back to Blocks"
+    "backToBlocks": "Back to Blocks",
+    "beautifulComponents": "Beautiful Components",
+    "searchPlaceholder": "Search components...",
+    "search": "Search",
+    "responsive": "100% Responsive",
+    "categoriesTitle": "Component Categories",
+    "categoriesDescription": "Browse our carefully designed component library by category and quickly find what you need",
+    "popular": "Popular",
+    "components": "components",
+    "startUsing": "Start Using Components",
+    "startUsingDescription": "All components support TypeScript and are fully responsive. Just copy the code and start using.",
+    "viewDocumentation": "View Documentation",
+    "githubRepository": "GitHub Repository",
+    "searchField": {
+      "placeholder": "Search components by name or description...",
+      "filterByCategory": "Filter by category",
+      "clearFilters": "Clear filters",
+      "all": "All",
+      "latest": "Latest",
+      "popular": "Popular",
+      "filtersApplied": "Filters applied"
+    }
+  },
+  "pricingPage": {
+    "title": "Choose Your Plan",
+    "description": "We offer flexible pricing plans to meet the needs of individual users to enterprise customers. All plans include core AI features and can be upgraded at any time.",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "description": "Answers to common questions about pricing and services.",
+      "questions": {
+        "cancel": {
+          "title": "Can I cancel anytime?",
+          "answer": "Yes, you can cancel your subscription at any time. After cancellation, you can still use the service until the end of the current billing period."
+        },
+        "payment": {
+          "title": "What payment methods are supported?",
+          "answer": "We support multiple payment methods including credit cards, debit cards, and Alipay, all securely processed through Stripe."
+        },
+        "upgrade": {
+          "title": "Can I upgrade or downgrade my plan?",
+          "answer": "Of course. You can upgrade or downgrade your plan at any time in your account settings, and the cost will be prorated."
+        },
+        "trial": {
+          "title": "How long is the free trial?",
+          "answer": "All paid plans come with a 14-day free trial, during which you can use all features for free."
+        }
+      }
+    },
+    "contact": {
+      "title": "Still have questions?",
+      "description": "Our customer service team is always here to answer your questions.",
+      "contactUs": "Contact Support",
+      "viewDocs": "View Documentation"
+    }
+  },
+  "blocksCategoryPage": {
+    "backToComponents": "Back to Components",
+    "noComponents": "No components in this category yet. Stay tuned!",
+    "browseOtherCategories": "Browse Other Categories",
+    "components": "components",
+    "featured": "Featured",
+    "searchPlaceholder": "Search components...",
+    "downloadAll": "Download All",
+    "copyCode": "Copy Code",
+    "livePreview": "Live Preview",
+    "needMore": "Need More Components?",
+    "exploreMore": "Explore other categories to discover more beautiful components",
+    "browseAllCategories": "Browse All Categories",
+    "viewDocumentation": "View Documentation",
+    "componentNotFound": "Component not found"
+  },
+  "componentPreviewToolbar": {
+    "desktop": "Desktop",
+    "tablet": "Tablet",
+    "mobile": "Mobile",
+    "toggleTheme": "Toggle theme",
+    "showPreview": "Show preview",
+    "showCode": "Show code",
+    "switchToPreview": "Switch to preview mode",
+    "viewComponentCode": "View component code"
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "description": "Overview of platform operational data",
+      "quickActions": {
+        "title": "Quick Actions",
+        "description": "Shortcuts for common management functions",
+        "userManagement": "User Management",
+        "systemSettings": "System Settings"
+      },
+      "systemStatus": {
+        "title": "System Status",
+        "database": "Database",
+        "authService": "Auth Service",
+        "paymentService": "Payment Service",
+        "status": "Normal"
+      }
+    },
+    "layout": {
+      "title": "Admin Panel",
+      "dashboard": "Dashboard",
+      "userManagement": "User Management",
+      "systemSettings": "System Settings",
+      "goHome": "Back to Home"
+    },
+    "users": {
+      "title": "User Management",
+      "description": "Manage platform users and permissions",
+      "detail": {
+        "title": "User Details",
+        "back": "Back to User List"
+      }
+    },
+    "settings": {
+      "title": "System Settings",
+      "description": "Manage system configuration and parameters",
+      "tabs": {
+        "general": "General Settings",
+        "payment": "Payment Config",
+        "ai": "AI Config",
+        "notification": "Notification Settings",
+        "security": "Security Config",
+        "feature": "Feature Toggles"
+      },
+      "general": {
+        "title": "General Config",
+        "description": "Basic website information and general settings"
+      },
+      "payment": {
+        "title": "Payment Config",
+        "description": "Stripe payment related configuration and parameters"
+      },
+      "ai": {
+        "title": "AI Config",
+        "description": "AI model and API related configuration"
+      },
+      "notification": {
+        "title": "Notification Settings",
+        "description": "Email, SMS and other notification related configuration"
+      },
+      "security": {
+        "title": "Security Config",
+        "description": "Security policies and access control configuration"
+      },
+      "feature": {
+        "title": "Feature Toggles",
+        "description": "Enable/disable various feature modules"
+      }
+    },
+    "front": {
+      "settings": {
+        "title": "Account Settings",
+        "description": "Manage your account information and preferences",
+        "security": {
+          "title": "Account Security",
+          "loginMethod": "Login Method",
+          "loginMethodDescription": "Managed by Clerk authentication service",
+          "twoFactor": "Two-Factor Authentication",
+          "twoFactorDescription": "Provide additional protection for your account",
+          "twoFactorConfig": "Configurable in Clerk",
+          "enabled": "Enabled"
+        }
+      }
+    }
+  },
+  "privacy": {
+    "metadata": {
+      "title": "Privacy Policy - AI SaaS Template",
+      "description": "Learn how AI SaaS Template collects, uses, and protects your personal information. We are committed to safeguarding your privacy rights."
+    },
+    "hero": {
+      "badge": "Privacy Protection",
+      "title": "Privacy Policy",
+      "subtitle": "We value and protect your privacy. This policy explains how we collect, use, and protect your personal information.",
+      "lastUpdated": "Last updated: January 1, 2024"
+    },
+    "commitment": {
+      "title": "Our Commitment",
+      "description": "AI SaaS Template is committed to protecting your privacy and personal information security. We adhere to the highest privacy protection standards to ensure your data is handled properly."
+    },
+    "sections": {
+      "informationCollection": {
+        "title": "Information Collection",
+        "content": [
+          "We collect information you actively provide, such as your name and email address when registering an account.",
+          "We automatically collect technical information, including IP address, browser type, device information, etc.",
+          "We use analytics data to help us improve service quality.",
+          "We collect information through cookies and similar technologies."
+        ]
+      },
+      "informationUse": {
+        "title": "Information Use",
+        "content": [
+          "We use your information to provide, maintain, and improve our services.",
+          "We process transactions and send related notifications.",
+          "We respond to your inquiries and provide customer support.",
+          "We send important updates and marketing information (you can opt-out).",
+          "We prevent fraud and ensure the security of our services."
+        ]
+      },
+      "informationSharing": {
+        "title": "Information Sharing",
+        "content": [
+          "We do not sell your personal information to third parties.",
+          "We may share necessary information with service providers to deliver our services.",
+          "We may disclose information when required by law or to protect rights.",
+          "In the event of a business transfer, information may be transferred as part of the assets."
+        ]
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "content": [
+          "We use industry-standard encryption technologies to protect data transmission.",
+          "We implement strict access controls and authentication measures.",
+          "We conduct regular security audits and vulnerability assessments.",
+          "Employees receive training on privacy and security.",
+          "Data backup and disaster recovery plans are in place."
+        ]
+      },
+      "internationalTransfers": {
+        "title": "International Transfers",
+        "content": [
+          "Your information may be processed outside of your country/region.",
+          "We ensure that cross-border data transfers comply with applicable laws and regulations.",
+          "Appropriate safeguards are in place to ensure data security.",
+          "We comply with relevant privacy regulations such as GDPR and CCPA."
+        ]
+      },
+      "dataRetention": {
+        "title": "Data Retention",
+        "content": [
+          "We retain your personal information only for as long as necessary.",
+          "After account deletion, we will delete relevant data within a reasonable timeframe.",
+          "Certain information may need to be retained for a longer period due to legal requirements.",
+          "You can request the deletion of your personal information at any time."
+        ]
+      }
+    },
+    "userRights": {
+      "title": "Your Rights",
+      "description": "Under applicable privacy laws, you have the following rights regarding your personal information.",
+      "rights": {
+        "access": {
+          "title": "Access Rights",
+          "description": "You have the right to know what personal information we have collected about you."
+        },
+        "correction": {
+          "title": "Correction Rights",
+          "description": "You can request the correction of inaccurate or incomplete personal information."
+        },
+        "deletion": {
+          "title": "Deletion Rights",
+          "description": "In certain circumstances, you can request the deletion of your personal information."
+        },
+        "restriction": {
+          "title": "Restriction Rights",
+          "description": "You can request the restriction of processing your personal information."
+        },
+        "portability": {
+          "title": "Data Portability Rights",
+          "description": "You have the right to obtain your data in a structured, commonly used format."
+        },
+        "objection": {
+          "title": "Objection Rights",
+          "description": "You can object to the processing of your personal information based on legitimate interests."
+        }
+      }
+    },
+    "contact": {
+      "title": "Have privacy-related questions?",
+      "description": "If you have any questions about our privacy policy, or wish to exercise your privacy rights, please feel free to contact us.",
+      "contactUs": "Contact Us",
+      "dataRequest": "Data Request"
+    },
+    "updates": {
+      "title": "Policy Updates",
+      "description": "We may update this privacy policy from time to time. We will notify you of significant changes via email or on our website. We recommend that you periodically review this policy for the latest information."
+    }
+  },
+  "paymentSuccess": {
+    "title": "Payment Successful!",
+    "subtitle": "Thank you for your purchase, your membership has been successfully activated.",
+    "membershipInfo": "Membership Information",
+    "membershipPlan": "Membership Plan",
+    "billingCycle": "Billing Cycle",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "paymentAmount": "Payment Amount",
+    "validity": "Validity",
+    "days": "days",
+    "expirationDate": "Expiration Date",
+    "featuresTitle": "You can now enjoy the following features",
+    "goToDashboard": "Go to Dashboard",
+    "viewPaymentHistory": "View Payment History",
+    "contactSupport": "Contact Support",
+    "supportText": "If you have any questions, please",
+    "debugInfo": "Debug Information",
+    "paymentProcessing": "Payment Processing",
+    "paymentProcessingSubtitle": "Your payment is being processed, please check your membership status later.",
+    "backToPricing": "Back to Pricing Page"
+  },
+  "paymentHistory": {
+    "loadingError": "Failed to load payment history, please try again later.",
+    "backToDashboard": "Back to Dashboard",
+    "title": "Payment History",
+    "noRecords": "No Payment History",
+    "noRecordsDescription": "You don't have any payment records yet. Choose a plan to start using our service!",
+    "viewPricingPlans": "View Pricing Plans",
+    "paymentRecords": "Payment Records",
+    "membershipPlan": "Membership Plan",
+    "status": {
+      "succeeded": "Succeeded",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "pagination": "Showing page {page} of {totalPages}"
+  },
+  "paymentCancelled": {
+    "title": "Payment Canceled",
+    "description": "Your payment has been canceled, and no charges were made.",
+    "needHelp": "Need help?",
+    "paymentIssues": "Having trouble with payment?",
+    "paymentIssuesDescription": "If you're experiencing technical issues during payment, please try refreshing the page or using a different payment method.",
+    "moreInfo": "Need more information?",
+    "moreInfoDescription": "You can view our pricing details or contact customer support for more information about membership plans.",
+    "tryAgain": "Try again later",
+    "tryAgainDescription": "You can return to the pricing page at any time to choose a suitable membership plan.",
+    "backToPricing": "Back to Pricing Page",
+    "goToDashboard": "Go to Dashboard",
+    "contactSupport": "Contact Support",
+    "viewDocs": "View Help Docs",
+    "faq": "Frequently Asked Questions",
+    "whyCancelled": "Why was the payment canceled?",
+    "whyCancelledDescription": "Payment may have been interrupted due to network issues, card restrictions, or if you manually canceled it.",
+    "willBeCharged": "Will my card be charged?",
+    "willBeChargedDescription": "No, canceled payments will not result in any charges.",
+    "howToRetry": "How can I try paying again?",
+    "howToRetryDescription": "You can go back to the pricing page and select a membership plan to try paying again."
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back! This is your personal workspace.",
+    "quickActions": "Quick Actions",
+    "upgradePlan": "Upgrade Plan",
+    "accountSettings": "Account Settings",
+    "paymentHistory": "Payment History",
+    "viewDocs": "View Docs"
+  },
+  "payment": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "save": "Save",
+    "perMonth": "per month",
+    "perYear": "per year",
+    "equivalentTo": "equivalent to ",
+    "processing": "Processing...",
+    "upgradeTo": "Upgrade to {planName}",
+    "securePayment": "Secure payment, cancel anytime",
+    "coupon": {
+      "title": "Coupon",
+      "remove": "Remove",
+      "placeholder": "Enter coupon code",
+      "applying": "Applying...",
+      "apply": "Apply",
+      "invalidCoupon": "Coupon is invalid or expired"
+    }
+  },
+  "membershipCenter": {
+    "loginToView": "Please log in to view the membership center",
+    "login": "Login",
+    "title": "Membership Center",
+    "description": "Manage your membership benefits and billing information",
+    "upgradePlan": "Upgrade Plan",
+    "overview": "Overview",
+    "usageStatsTitle": "Usage Stats",
+    "billingManagement": "Billing Management",
+    "settings": "Settings",
+    "upgradeOrChangePlan": "Upgrade or Change Plan",
+    "statusCard": {
+      "title": "Membership Status",
+      "freeUser": "You are currently a free user",
+      "freePlan": "Free Plan",
+      "upgrade": "Upgrade Membership",
+      "billingCycle": "Billing Cycle",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "daysRemaining": "Days Remaining",
+      "days": "{count} day | {count} days",
+      "expirationDate": "Expiration Date",
+      "membershipDuration": "Membership Duration",
+      "daysCount": "{daysRemaining} / {durationDays} days"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "upgradePlan": "Upgrade Plan",
+      "viewBilling": "View Billing",
+      "accountSettings": "Account Settings"
+    },
+    "usageOverview": {
+      "title": "Usage Overview",
+      "useCases": "Use Cases",
+      "tutorials": "Tutorials",
+      "blogs": "Blogs",
+      "apiCalls": "API Calls",
+      "unlimited": "Unlimited"
+    },
+    "usageStats": {
+      "title": "Detailed Usage Statistics",
+      "monthly": {
+        "title": "This Month's Usage",
+        "useCases": "Use Case Generation",
+        "tutorials": "Tutorial Creation",
+        "blogs": "Blog Publishing",
+        "apiCalls": "API Calls"
+      },
+      "total": {
+        "title": "Total Usage",
+        "useCases": "Total Use Cases",
+        "tutorials": "Total Tutorials",
+        "blogs": "Total Blogs",
+        "apiCalls": "Total API Calls"
+      }
+    },
+    "benefits": {
+      "title": "Membership Benefits",
+      "apiAccess": "API Access",
+      "customModels": "Custom Models",
+      "prioritySupport": "Priority Support",
+      "exportData": "Export Data",
+      "bulkOperations": "Bulk Operations",
+      "advancedAnalytics": "Advanced Analytics",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
+    },
+    "billing": {
+      "title": "Billing Management",
+      "currentBillingCycle": "Current Billing Cycle",
+      "yearly": "Yearly",
+      "monthly": "Monthly",
+      "autoRenewal": "Auto-renewal",
+      "renewalOn": "On",
+      "renewalOff": "Off",
+      "nextRenewalDate": "Next Renewal Date",
+      "manageRenewal": "Manage Renewal",
+      "downloadInvoice": "Download Invoice"
+    },
+    "settingsCard": {
+      "title": "Membership Settings",
+      "autoRenewal": "Auto-renewal",
+      "autoRenewalDescription": "Automatically renew membership upon expiration",
+      "manage": "Manage",
+      "paymentMethod": "Payment Method",
+      "paymentMethodDescription": "Manage your payment methods",
+      "setup": "Setup",
+      "cancelMembership": "Cancel Membership",
+      "cancelMembershipDescription": "Cancel your current membership plan",
+      "cancel": "Cancel"
+    }
+  },
+  "membershipStatus": {
+    "title": "Membership Status",
+    "noActivePlan": "You do not have an active membership plan",
+    "freeUser": "Free User",
+    "currentPlan": "Current Plan",
+    "billingCycle": "Billing Cycle",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "expirationDate": "Expiration Date",
+    "daysRemaining": "Remaining {count} day | Remaining {count} days",
+    "paymentAmount": "Payment Amount"
+  },
+  "paymentHistoryDashboard": {
+    "title": "Payment History",
+    "loginToView": "Please log in to view payment history",
+    "loadError": "Failed to load payment history",
+    "viewAll": "View All",
+    "noRecords": "No payment records",
+    "selectPlan": "Select Plan",
+    "yearly": "Yearly",
+    "monthly": "Monthly",
+    "save": "Save",
+    "viewMore": "View more payment records"
   }
 }

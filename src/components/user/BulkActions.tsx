@@ -38,20 +38,20 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
   const utils = trpc.useUtils()
   const bulkUpdateMutation = trpc.users.bulkUpdateUsers.useMutation({
     onSuccess: () => {
-      // 刷新用户列表和统计数据
+      // Refresh user lists and statistics
       utils.users.getUsers.invalidate()
       utils.users.getUserStats.invalidate()
 
       setState({
         success: true,
-        message: `成功更新 ${selectedUserIds.length} 个用户`,
+        message: `Successfully updated ${selectedUserIds.length} users`,
       })
       onSuccess()
     },
     onError: error => {
       setState({
         success: false,
-        error: error.message || '操作失败，请重试',
+        error: error.message || 'The operation failed, please try again',
       })
     },
     onSettled: () => {
@@ -107,13 +107,13 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
       <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
         <div className="flex items-center space-x-4">
           <p className="text-sm font-medium">
-            已选择 {selectedUserIds.length} 个用户
+            {selectedUserIds.length} users selected
           </p>
 
           <div className="flex items-center space-x-2">
             <Select value={selectedAction} onValueChange={handleActionSelect}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="选择操作" />
+                <SelectValue placeholder="Select action" />
               </SelectTrigger>
               <SelectContent>
                 {BULK_ACTIONS.map(action => (
@@ -136,20 +136,21 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
       <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>确认批量操作</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Bulk Action</AlertDialogTitle>
             <AlertDialogDescription>
-              您确定要对选中的 {selectedUserIds.length} 个用户执行 「
-              {selectedActionConfig?.label}」操作吗？
+              Are you sure you want to perform the "
+              {selectedActionConfig?.label}" action on the selected{' '}
+              {selectedUserIds.length} users?
               {selectedAction === 'delete' && (
                 <span className="block mt-2 text-red-600 font-medium">
-                  注意：删除操作不可恢复！
+                  Note: This action cannot be undone!
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={bulkUpdateMutation.isPending}>
-              取消
+              Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => executeAction(selectedAction)}
@@ -158,7 +159,7 @@ export function BulkActions({ selectedUserIds, onSuccess }: BulkActionsProps) {
                 selectedAction === 'delete' ? 'bg-red-600 hover:bg-red-700' : ''
               }
             >
-              {bulkUpdateMutation.isPending ? '执行中...' : '确认执行'}
+              {bulkUpdateMutation.isPending ? 'Executing...' : 'Confirm'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

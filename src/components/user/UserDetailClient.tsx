@@ -24,8 +24,8 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
   } = trpc.users.getUserById.useQuery(
     { id: userId },
     {
-      staleTime: 2 * 60 * 1000, // 2分钟缓存
-      gcTime: 5 * 60 * 1000, // 5分钟垃圾回收
+      staleTime: 2 * 60 * 1000, // 2 minutes cache
+      gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
     }
   )
 
@@ -38,7 +38,9 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
       <Card>
         <CardContent className="p-6">
           <p className="text-destructive">
-            {error ? '加载用户信息失败' : '用户不存在或已被删除'}
+            {error
+              ? 'Failed to load user information'
+              : 'User does not exist or has been deleted'}
           </p>
         </CardContent>
       </Card>
@@ -59,7 +61,7 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>用户详情</CardTitle>
+            <CardTitle>User Details</CardTitle>
             <UserActions user={user} />
           </div>
         </CardHeader>
@@ -75,7 +77,7 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
 
             <div className="space-y-2">
               <h2 className="text-2xl font-semibold">
-                {user.fullName || '未设置姓名'}
+                {user.fullName || 'No name set'}
               </h2>
               <p className="text-muted-foreground">{user.email}</p>
 
@@ -103,42 +105,43 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div>
-              <p className="text-sm font-medium">用户ID</p>
+              <p className="text-sm font-medium">User ID</p>
               <p className="text-sm text-muted-foreground font-mono">
                 {user.id}
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">注册时间</p>
+              <p className="text-sm font-medium">Registration Time</p>
               <p className="text-sm text-muted-foreground">
-                {user.createdAt?.toLocaleDateString('zh-CN')}
+                {user.createdAt?.toLocaleDateString('en-US')}
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">最后登录</p>
+              <p className="text-sm font-medium">Last Login</p>
               <p className="text-sm text-muted-foreground">
-                {user.lastLoginAt?.toLocaleDateString('zh-CN') || '从未登录'}
+                {user.lastLoginAt?.toLocaleDateString('en-US') ||
+                  'Never logged in'}
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">使用案例</p>
+              <p className="text-sm font-medium">Use Cases</p>
               <p className="text-sm text-muted-foreground">
                 {user.totalUseCases || 0}
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">教程数量</p>
+              <p className="text-sm font-medium">Tutorials</p>
               <p className="text-sm text-muted-foreground">
                 {user.totalTutorials || 0}
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-medium">博客数量</p>
+              <p className="text-sm font-medium">Blogs</p>
               <p className="text-sm text-muted-foreground">
                 {user.totalBlogs || 0}
               </p>
@@ -147,31 +150,31 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
 
           {user.preferences && (
             <div className="pt-4 border-t">
-              <h3 className="text-lg font-medium mb-3">用户偏好</h3>
+              <h3 className="text-lg font-medium mb-3">User Preferences</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <p className="text-sm font-medium">主题</p>
+                  <p className="text-sm font-medium">Theme</p>
                   <p className="text-sm text-muted-foreground">
-                    {user.preferences.theme === 'dark' ? '深色' : '浅色'}
+                    {user.preferences.theme === 'dark' ? 'Dark' : 'Light'}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">语言</p>
+                  <p className="text-sm font-medium">Language</p>
                   <p className="text-sm text-muted-foreground">
-                    {user.preferences.language === 'zh' ? '中文' : 'English'}
+                    {user.preferences.language === 'de' ? 'Deutsch' : 'English'}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">货币</p>
+                  <p className="text-sm font-medium">Currency</p>
                   <p className="text-sm text-muted-foreground">
                     {user.preferences.currency}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm font-medium">时区</p>
+                  <p className="text-sm font-medium">Timezone</p>
                   <p className="text-sm text-muted-foreground">
                     {user.preferences.timezone || 'UTC'}
                   </p>

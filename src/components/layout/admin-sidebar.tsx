@@ -32,20 +32,20 @@ interface NavItem {
 
 const adminNavItems: NavItem[] = [
   {
-    title: '仪表板',
+    title: 'Dashboard',
     href: '/admin',
     icon: LayoutDashboard,
     badge: null,
   },
   {
-    title: '用户管理',
+    title: 'Users',
     href: '/admin/users',
     icon: Users,
     badge: null,
   },
   {
-    title: '系统设置',
-    href: '/admin/system',
+    title: 'Settings',
+    href: '/admin/settings',
     icon: Settings,
     badge: null,
   },
@@ -60,7 +60,7 @@ export function AdminSidebar() {
 
   useEffect(() => {
     setMounted(true)
-    // 自动展开包含当前路径的菜单项
+    // Automatically expand the menu item that contains the current path
     const expandedItem = adminNavItems.find(item =>
       item.children?.some(child => pathname.startsWith(child.href))
     )
@@ -70,7 +70,7 @@ export function AdminSidebar() {
   }, [pathname])
 
   const handleSignOut = async () => {
-    if (isSigningOut) return // 防止重复点击
+    if (isSigningOut) return // Prevent multiple clicks
 
     setIsSigningOut(true)
     try {
@@ -94,7 +94,7 @@ export function AdminSidebar() {
 
   return (
     <div className="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border shadow-lg flex flex-col">
-      {/* 头部 */}
+      {/* Header */}
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center mb-2">
           <div className="relative">
@@ -105,13 +105,13 @@ export function AdminSidebar() {
             <Sparkles className="absolute -top-1 -right-4 h-4 w-4 text-yellow-500 animate-pulse" />
           </div>
         </div>
-        <p className="text-sm text-sidebar-foreground/70">管理后台</p>
+        <p className="text-sm text-sidebar-foreground/70">Admin Panel</p>
         <Badge variant="secondary" className="mt-2 text-xs">
           v2.0.0
         </Badge>
       </div>
 
-      {/* 导航菜单 */}
+      {/* Navigation menu */}
       <nav className="px-3 py-4 space-y-1 flex-1 overflow-y-auto">
         {adminNavItems.map(item => {
           const Icon = item.icon
@@ -129,7 +129,7 @@ export function AdminSidebar() {
 
           return (
             <div key={item.href}>
-              {/* 主菜单项 */}
+              {/* Main menu item */}
               {hasChildren ? (
                 <button
                   onClick={() => toggleExpanded(item.href)}
@@ -207,7 +207,7 @@ export function AdminSidebar() {
                 </Link>
               )}
 
-              {/* 子菜单 */}
+              {/* Submenu */}
               {hasChildren && isExpanded && (
                 <div className="ml-4 mt-1 space-y-1">
                   {item.children?.map(child => {
@@ -245,18 +245,18 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      {/* 底部操作区 */}
+      {/* Bottom action area */}
       <div className="p-3 border-t border-sidebar-border space-y-2">
-        {/* 返回首页 */}
+        {/* Back to home */}
         <Link
           href="/"
           className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-sidebar-foreground rounded-lg hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-all duration-200 group"
         >
           <Home className="h-4 w-4 mr-3 text-sidebar-foreground/70 group-hover:text-sidebar-accent-foreground transition-colors" />
-          返回首页
+          Back to Home
         </Link>
 
-        {/* 退出登录 */}
+        {/* Log out */}
         <Button
           variant="ghost"
           size="sm"
@@ -267,7 +267,7 @@ export function AdminSidebar() {
           <LogOut
             className={cn('h-4 w-4 mr-3', isSigningOut && 'animate-spin')}
           />
-          {isSigningOut ? '退出中...' : '退出登录'}
+          {isSigningOut ? 'Signing out...' : 'Sign Out'}
         </Button>
       </div>
     </div>

@@ -3,10 +3,11 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { useTranslations } from 'next-intl'
 import { SearchIcon, XIcon } from 'lucide-react'
-import { useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
-// 简化的博客文章接口
+// Simplified blog post interface
 interface SimpleBlogPost {
   url: string
   title: string
@@ -29,10 +30,11 @@ export function BlogSearch({
   locale,
   onFilteredPosts,
 }: BlogSearchProps) {
+  const t = useTranslations('blog.search')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
 
-  // 获取所有标签
+  // Get all tags
   const allTags = useMemo(() => {
     const tags = new Set<string>()
     posts.forEach(post => {
@@ -41,7 +43,7 @@ export function BlogSearch({
     return Array.from(tags).sort()
   }, [posts])
 
-  // 过滤文章
+  // Filter articles
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
       const matchesSearch =
@@ -58,7 +60,7 @@ export function BlogSearch({
     })
   }, [posts, searchTerm, selectedTags])
 
-  // 通知父组件过滤结果 - 使用 useEffect 而不是 useMemo 来避免在渲染期间更新状态
+  // Notify parent component of filter results - use useEffect instead of useMemo to avoid updating state during render
   useEffect(() => {
     onFilteredPosts(filteredPosts)
   }, [filteredPosts, onFilteredPosts])
@@ -78,14 +80,10 @@ export function BlogSearch({
 
   return (
     <div className="space-y-6">
-      {/* 搜索框 */}
+      {/* Search box */}
       <div className="relative">
         <Input
-          placeholder={
-            locale === 'zh'
-              ? '搜索文章标题、描述或作者...'
-              : 'Search articles by title, description or author...'
-          }
+          placeholder={t('placeholder')}
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           className="pl-10 pr-10"
@@ -103,12 +101,10 @@ export function BlogSearch({
         )}
       </div>
 
-      {/* 标签过滤 */}
+      {/* Tag filtering */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium">
-            {locale === 'zh' ? '按标签筛选' : 'Filter by tags'}
-          </label>
+          <label className="text-sm font-medium">{t('filterByTags')}</label>
           {hasFilters && (
             <Button
               variant="ghost"
@@ -116,7 +112,7 @@ export function BlogSearch({
               onClick={clearAllFilters}
               className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground"
             >
-              {locale === 'zh' ? '清除筛选' : 'Clear filters'}
+              {t('clearFilters')}
             </Button>
           )}
         </div>
@@ -134,19 +130,15 @@ export function BlogSearch({
         </div>
       </div>
 
-      {/* 搜索结果统计 */}
+      {/* Search results statistics */}
       <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>
-          {locale === 'zh'
-            ? `找到 ${filteredPosts.length} 篇文章`
-            : `Found ${filteredPosts.length} article${filteredPosts.length === 1 ? '' : 's'}`}
-        </span>
+        <span>{t('foundArticles', { count: filteredPosts.length })}</span>
         {hasFilters && (
           <span className="flex items-center gap-2">
-            {locale === 'zh' ? '已应用筛选条件' : 'Filters applied'}
+            {t('filtersApplied')}
             {selectedTags.length > 0 && (
               <Badge variant="secondary" className="text-xs">
-                {selectedTags.length} {locale === 'zh' ? '个标签' : 'tags'}
+                {t('tags', { count: selectedTags.length })}
               </Badge>
             )}
           </span>
