@@ -84,9 +84,13 @@ async function handleCheckoutSessionCompleted(
   session: Stripe.Checkout.Session
 ) {
   try {
-    const userId = session.client_reference_id
+    const userId = session.metadata?.userId
     const planId = session.metadata?.planId
     const durationType = session.metadata?.durationType || 'monthly'
+
+    logger.info(`session: ${JSON.stringify(session)}`)
+    logger.info(`userid: ${userId}`)
+    logger.info(`metadata: ${JSON.stringify(session.metadata)}`)
 
     if (!userId || !planId) {
       logger.error(

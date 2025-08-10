@@ -132,9 +132,9 @@ export default function SEOHead({
       <link rel="canonical" href={fullUrl} />
 
       {/* Language and Region */}
-      <meta httpEquiv="Content-Language" content="zh-cn" />
-      <meta name="geo.region" content="CN" />
-      <meta name="geo.placename" content="China" />
+      <meta httpEquiv="Content-Language" content="en-EN" />
+      <meta name="geo.region" content="EN" />
+      <meta name="geo.placename" content="USA" />
 
       {/* Open Graph / Facebook */}
       <meta property="og:type" content={type} />

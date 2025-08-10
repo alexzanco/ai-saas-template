@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { ArrowRight, Calendar, CheckCircle, CreditCard } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -14,6 +14,7 @@ import { useSearchParams } from 'next/navigation'
 function PaymentSuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
+  const locale = useLocale()
   const t = useTranslations('paymentSuccess')
 
   const {
@@ -71,7 +72,7 @@ function PaymentSuccessContent() {
                   {t('membershipPlan')}
                 </p>
                 <p className="font-medium text-lg">
-                  {currentPlan.nameDe || currentPlan.name}
+                  {locale === 'de' ? currentPlan.nameDe : currentPlan.name}
                 </p>
               </div>
               <div>

@@ -11,7 +11,7 @@ import { MEMBERSHIP_STATUS } from '@/constants/payment'
 import { useUserMembership } from '@/hooks/use-membership'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   CreditCard,
   Crown,
@@ -141,6 +141,7 @@ function MembershipStatusCard({
   membershipStatus: any
   isLoading: boolean
 }) {
+  const locale = useLocale()
   const t = useTranslations('membershipCenter.statusCard')
 
   if (isLoading) {
@@ -200,9 +201,11 @@ function MembershipStatusCard({
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Crown className="h-5 w-5 text-yellow-500" />
-            {currentPlan?.nameDe || currentPlan?.name}
+            {locale === 'de' ? currentPlan?.nameDe : currentPlan?.name}
           </div>
-          <Badge className={statusConfig?.color}>{statusConfig?.labelDe}</Badge>
+          <Badge className={statusConfig?.color}>
+            {locale === 'de' ? statusConfig?.labelDe : statusConfig?.label}
+          </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -230,7 +233,7 @@ function MembershipStatusCard({
             <p className="text-sm text-muted-foreground">
               {t('expirationDate')}
             </p>
-            <p className="font-medium">{endDate.toLocaleDateString('zh-CN')}</p>
+            <p className="font-medium">{endDate.toLocaleDateString('de-DE')}</p>
           </div>
         )}
 
@@ -436,25 +439,25 @@ function UsageStatsCard({
         <CardContent className="space-y-4">
           <DetailedUsageItem
             label={t('monthly.useCases')}
-            used={usage.monthlyUseCases || 0}
+            used={usage.usedUseCases || 0}
             limit={currentPlan?.maxUseCases || 0}
             icon={<FileText className="h-4 w-4" />}
           />
           <DetailedUsageItem
             label={t('monthly.tutorials')}
-            used={usage.monthlyTutorials || 0}
+            used={usage.usedTutorials || 0}
             limit={currentPlan?.maxTutorials || 0}
             icon={<Globe className="h-4 w-4" />}
           />
           <DetailedUsageItem
             label={t('monthly.blogs')}
-            used={usage.monthlyBlogs || 0}
+            used={usage.usedBlogs || 0}
             limit={currentPlan?.maxBlogs || 0}
             icon={<Users className="h-4 w-4" />}
           />
           <DetailedUsageItem
             label={t('monthly.apiCalls')}
-            used={usage.monthlyApiCalls || 0}
+            used={usage.usedApiCalls || 0}
             limit={currentPlan?.maxApiCalls || 0}
             icon={<Zap className="h-4 w-4" />}
           />
@@ -632,7 +635,7 @@ function BillingManagementCard({
               {t('nextRenewalDate')}
             </p>
             <p className="font-medium">
-              {new Date(membership.nextRenewalDate).toLocaleDateString('zh-CN')}
+              {new Date(membership.nextRenewalDate).toLocaleDateString('de-DE')}
             </p>
           </div>
         )}

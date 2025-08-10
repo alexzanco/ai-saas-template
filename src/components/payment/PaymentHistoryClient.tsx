@@ -7,11 +7,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { PAYMENT_STATUS, formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { CreditCard, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
 
 export function PaymentHistoryClient() {
+  const locale = useLocale()
   const t = useTranslations('paymentHistoryDashboard')
   const { isSignedIn } = useUser()
   const { data, isLoading, error } = trpc.payments.getPaymentHistory.useQuery(
@@ -110,12 +111,14 @@ export function PaymentHistoryClient() {
                           statusConfig?.color || 'bg-gray-100 text-gray-800'
                         }
                       >
-                        {statusConfig?.labelDe || payment.status}
+                        {locale === 'de'
+                          ? statusConfig?.labelDe || payment.status
+                          : statusConfig?.label}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span>
-                        {paymentDate.toLocaleDateString('zh-CN', {
+                        {paymentDate.toLocaleDateString('de-DE', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',

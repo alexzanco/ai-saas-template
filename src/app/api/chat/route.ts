@@ -2,7 +2,14 @@ import { convertToModelMessages, streamText, UIMessage } from 'ai'
 import { google } from '@ai-sdk/google'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { conversations, messages, promptTemplates } from '@/drizzle/schemas'
+import {
+  conversations,
+  messages,
+  promptTemplates,
+  userMemberships,
+  userUsageLimits,
+  membershipPlans,
+} from '@/drizzle/schemas'
 import { and, eq, sql } from 'drizzle-orm'
 import { z } from 'zod'
 import { id } from 'zod/v4/locales'
@@ -43,6 +50,54 @@ export async function POST(req: Request) {
       persona,
       conversationId: convId,
     } = validation.data
+
+    const userUsage = await db.query.userUsageLimits.findFirst({
+      where: eq(userUsageLimits.userId, userId),
+    })
+    const membership = await db.query.userMemberships.findFirst({
+      where: and(
+        eq(userMemberships.userId, userId),
+        eq(userMemberships.status, 'active')
+      ),
+    })
+
+    if (!membership) {
+      return new Response(
+        JSON.stringify({ error: 'No active membership found.' }),
+        {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    const plan = await db.query.membershipPlans.findFirst({
+      where: eq(membershipPlans.id, membership.planId),
+    })
+
+    if (!plan) {
+      return new Response(
+        JSON.stringify({ error: 'No active membership found.' }),
+        {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    if (
+      !userUsage ||
+      (plan.maxApiCalls !== -1 &&
+        (userUsage.usedApiCalls || 0) >= (plan.maxApiCalls || 0))
+    ) {
+      return new Response(
+        JSON.stringify({ error: 'API call limit exceeded.' }),
+        {
+          status: 429,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+    }
 
     let conversationId = convId
 
@@ -134,6 +189,17 @@ export async function POST(req: Request) {
             totalTokens: sql`${conversations.totalTokens} + ${(usage as any).totalTokens}`,
           })
           .where(eq(conversations.id, conversationId))
+
+        // Update user's API call count
+        // Update user's API call count
+        if (userUsage) {
+          await db
+            .update(userUsageLimits)
+            .set({
+              usedApiCalls: sql`${userUsageLimits.usedApiCalls} + 1`,
+            })
+            .where(eq(userUsageLimits.id, userUsage.id))
+        }
       },
     })
 

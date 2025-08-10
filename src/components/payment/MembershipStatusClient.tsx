@@ -6,11 +6,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { MEMBERSHIP_STATUS, formatPrice } from '@/constants/payment'
 import { useUserMembership } from '@/hooks/use-membership'
 import { useUser } from '@clerk/nextjs'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Calendar, Shield } from 'lucide-react'
 
 export function MembershipStatusClient() {
   const t = useTranslations('membershipStatus')
+  const locale = useLocale()
   const { user } = useUser()
   const { membershipStatus, isLoading } = useUserMembership(user?.id)
 
@@ -61,7 +62,7 @@ export function MembershipStatusClient() {
               {t('title')}
             </div>
             <Badge className={statusConfig?.color}>
-              {statusConfig?.labelDe}
+              {locale === 'de' ? statusConfig?.labelDe : statusConfig?.label}
             </Badge>
           </CardTitle>
         </CardHeader>
@@ -72,7 +73,7 @@ export function MembershipStatusClient() {
                 {t('currentPlan')}
               </p>
               <p className="font-medium">
-                {currentPlan?.nameDe || currentPlan?.name}
+                {locale === 'de' ? currentPlan?.nameDe : currentPlan?.name}
               </p>
             </div>
             <div>
@@ -99,7 +100,7 @@ export function MembershipStatusClient() {
                 </div>
               </div>
               <p className="font-medium">
-                {endDate.toLocaleDateString('zh-CN')}
+                {endDate.toLocaleDateString('de-DE')}
               </p>
             </div>
           )}

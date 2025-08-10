@@ -17,6 +17,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { trpc } from '@/lib/trpc/client'
 import { Conversation, Message } from '@/drizzle/schemas'
+import { AuthGuardClient } from '@/components/auth'
 
 const personas = [
   'Marketing Specialist',
@@ -99,121 +100,127 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="grid h-[calc(100vh-264px)] w-full grid-cols-[300px_1fr]">
-      <div className="flex h-[calc(100vh-264px)] flex-col border-r bg-gray-100/40 dark:bg-gray-800/40">
-        <div className="flex h-[60px] items-center border-b px-6">
-          <h2 className="text-lg font-semibold">Conversations</h2>
-        </div>
-        <div className="p-2">
-          <Button variant="outline" className="w-full" onClick={handleNewChat}>
-            New Chat
-          </Button>
-        </div>
-        <ScrollArea className="flex-1">
-          <nav className="grid gap-1 p-2">
-            {conversations?.map((conv: Conversation) => (
-              <Button
-                key={conv.id}
-                variant={conversationId === conv.id ? 'secondary' : 'ghost'}
-                className="justify-start"
-                onClick={() => handleConversationSelect(conv.id)}
-              >
-                {conv.title}
-              </Button>
-            ))}
-          </nav>
-        </ScrollArea>
-      </div>
-      <div className="flex h-[calc(100vh-264px)] flex-col">
-        <header className="flex h-[60px] items-center justify-between border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
-          <h2 className="text-lg font-semibold">
-            {conversations?.find((c: Conversation) => c.id === conversationId)
-              ?.title || 'New Chat'}
-          </h2>
-          <Select value={persona} onValueChange={setPersona}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select a persona" />
-            </SelectTrigger>
-            <SelectContent>
-              {personas.map(p => (
-                <SelectItem key={p} value={p}>
-                  {p}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </header>
-        <ScrollArea ref={scrollAreaRef} className="flex-1 p-6">
-          <div className="space-y-4">
-            {messages.map(m => (
-              <div
-                key={m.id}
-                className={`flex items-start gap-4 ${
-                  m.role === 'user' ? 'justify-end' : ''
-                }`}
-              >
-                {m.role !== 'user' && (
-                  <Avatar>
-                    <AvatarFallback>{persona?.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                )}
-                <Card
-                  className={
-                    m.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
-                  }
-                >
-                  <CardContent className="p-3">
-                    {m.parts.map((part, i) => (
-                      <span key={i}>
-                        {part.type === 'text' ? part.text : ''}
-                      </span>
-                    ))}
-                  </CardContent>
-                </Card>
-                {m.role === 'user' && (
-                  <Avatar>
-                    <AvatarFallback>U</AvatarFallback>
-                  </Avatar>
-                )}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
+    <AuthGuardClient requireAuth>
+      <div className="grid h-[calc(100vh-264px)] w-full grid-cols-[300px_1fr]">
+        <div className="flex h-[calc(100vh-264px)] flex-col border-r bg-gray-100/40 dark:bg-gray-800/40">
+          <div className="flex h-[60px] items-center border-b px-6">
+            <h2 className="text-lg font-semibold">Conversations</h2>
           </div>
-        </ScrollArea>
-        <div className="border-t p-4">
-          <form
-            onSubmit={e => {
-              e.preventDefault()
-              if (input.trim()) {
-                console.log('Sending message:', input, conversationId)
-                sendMessage(
-                  { text: input },
-                  {
-                    body: {
-                      persona,
-                      conversationId,
-                    },
-                  }
-                )
-                setInput('')
-              }
-            }}
-            className="flex items-center gap-4"
-          >
-            <Input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              placeholder="Type your message..."
-              disabled={status !== 'ready'}
-            />
-            <Button type="submit" disabled={status !== 'ready'}>
-              Send
+          <div className="p-2">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={handleNewChat}
+            >
+              New Chat
             </Button>
-          </form>
+          </div>
+          <ScrollArea className="flex-1">
+            <nav className="grid gap-1 p-2">
+              {conversations?.map((conv: Conversation) => (
+                <Button
+                  key={conv.id}
+                  variant={conversationId === conv.id ? 'secondary' : 'ghost'}
+                  className="justify-start"
+                  onClick={() => handleConversationSelect(conv.id)}
+                >
+                  {conv.title}
+                </Button>
+              ))}
+            </nav>
+          </ScrollArea>
+        </div>
+        <div className="flex h-[calc(100vh-264px)] flex-col">
+          <header className="flex h-[60px] items-center justify-between border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
+            <h2 className="text-lg font-semibold">
+              {conversations?.find((c: Conversation) => c.id === conversationId)
+                ?.title || 'New Chat'}
+            </h2>
+            <Select value={persona} onValueChange={setPersona}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select a persona" />
+              </SelectTrigger>
+              <SelectContent>
+                {personas.map(p => (
+                  <SelectItem key={p} value={p}>
+                    {p}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </header>
+          <ScrollArea ref={scrollAreaRef} className="flex-1 p-6">
+            <div className="space-y-4">
+              {messages.map(m => (
+                <div
+                  key={m.id}
+                  className={`flex items-start gap-4 ${
+                    m.role === 'user' ? 'justify-end' : ''
+                  }`}
+                >
+                  {m.role !== 'user' && (
+                    <Avatar>
+                      <AvatarFallback>{persona?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  )}
+                  <Card
+                    className={
+                      m.role === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                    }
+                  >
+                    <CardContent className="p-3">
+                      {m.parts.map((part, i) => (
+                        <span key={i}>
+                          {part.type === 'text' ? part.text : ''}
+                        </span>
+                      ))}
+                    </CardContent>
+                  </Card>
+                  {m.role === 'user' && (
+                    <Avatar>
+                      <AvatarFallback>U</AvatarFallback>
+                    </Avatar>
+                  )}
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          </ScrollArea>
+          <div className="border-t p-4">
+            <form
+              onSubmit={e => {
+                e.preventDefault()
+                if (input.trim()) {
+                  console.log('Sending message:', input, conversationId)
+                  sendMessage(
+                    { text: input },
+                    {
+                      body: {
+                        persona,
+                        conversationId,
+                      },
+                    }
+                  )
+                  setInput('')
+                }
+              }}
+              className="flex items-center gap-4"
+            >
+              <Input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Type your message..."
+                disabled={status !== 'ready'}
+              />
+              <Button type="submit" disabled={status !== 'ready'}>
+                Send
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </AuthGuardClient>
   )
 }

@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import {
   boolean,
   decimal,
@@ -156,6 +157,38 @@ export type NewMessage = typeof messages.$inferInsert
 
 export type PromptTemplate = typeof promptTemplates.$inferSelect
 export type NewPromptTemplate = typeof promptTemplates.$inferInsert
+
+// ===============================
+// Relations
+// ===============================
+
+export const conversationsRelations = relations(
+  conversations,
+  ({ one, many }) => ({
+    user: one(users, {
+      fields: [conversations.userId],
+      references: [users.id],
+    }),
+    messages: many(messages),
+  })
+)
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  conversation: one(conversations, {
+    fields: [messages.conversationId],
+    references: [conversations.id],
+  }),
+}))
+
+export const promptTemplatesRelations = relations(
+  promptTemplates,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [promptTemplates.userId],
+      references: [users.id],
+    }),
+  })
+)
 
 // ===============================
 // Enum definition

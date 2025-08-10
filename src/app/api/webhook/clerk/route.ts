@@ -1,4 +1,10 @@
-import { users } from '@/drizzle/schemas'
+import {
+  membershipPlans,
+  userMemberships,
+  users,
+  userUsageLimits,
+} from '@/drizzle/schemas'
+import { DEFAULT_USAGE_LIMITS } from '@/constants/payment'
 import { formatClerkUser, verifyClerkWebhook } from '@/lib/clerk'
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
@@ -108,6 +114,9 @@ async function handleUserCreated(userData: any) {
     logger.info(
       `User created successfully: ${formattedUser.id} (${formattedUser.email})`
     )
+
+    // Assign free membership plan
+    await handleFreeMembership(formattedUser.id)
   } catch (error) {
     logger.error('Failed to process user.created:', error as Error)
     logger.error('User data: ' + JSON.stringify(userData))
@@ -268,6 +277,97 @@ async function handleOrganizationMembershipCreated(membershipData: any) {
       error as Error
     )
     throw error
+  }
+}
+
+// Handle free membership
+async function handleFreeMembership(userId: string) {
+  try {
+    logger.info(`Start assigning free membership plan for user: ${userId}`)
+
+    // Find the free membership plan
+    const freePlan = await db.query.membershipPlans.findFirst({
+      where: eq(membershipPlans.priceUSDMonthly, '0'),
+    })
+
+    if (!freePlan) {
+      logger.warn('No free membership plan found. Skipping assignment.')
+      return
+    }
+
+    // Create user membership record
+    const membershipStartDate = new Date()
+    const duration = freePlan.monthlyDurationDays ?? 30
+    const membershipEndDate = new Date(
+      membershipStartDate.getTime() + duration * 24 * 60 * 60 * 1000
+    )
+
+    const [membershipRecord] = await db
+      .insert(userMemberships)
+      .values({
+        userId: userId,
+        planId: freePlan.id,
+        startDate: membershipStartDate,
+        endDate: membershipEndDate,
+        status: 'active',
+        durationType: 'monthly',
+        durationDays: duration,
+        purchaseAmount: '0.00',
+        currency: 'USD',
+        autoRenew: false,
+      })
+      .returning({ id: userMemberships.id })
+
+    // Create or update user usage limit record
+    const limits = DEFAULT_USAGE_LIMITS.free
+    const existingLimits = await db.query.userUsageLimits.findFirst({
+      where: eq(userUsageLimits.userId, userId),
+    })
+
+    if (membershipRecord) {
+      if (existingLimits) {
+        await db
+          .update(userUsageLimits)
+          .set({
+            membershipId: membershipRecord.id,
+            monthlyUseCases: limits.monthlyUseCases,
+            monthlyTutorials: limits.monthlyTutorials,
+            monthlyBlogs: limits.monthlyBlogs,
+            monthlyApiCalls: limits.monthlyApiCalls,
+            usedUseCases: 0,
+            usedTutorials: 0,
+            usedBlogs: 0,
+            usedApiCalls: 0,
+            currentPeriodStart: membershipStartDate,
+            currentPeriodEnd: membershipEndDate,
+            updatedAt: new Date(),
+          })
+          .where(eq(userUsageLimits.userId, userId))
+      } else {
+        await db.insert(userUsageLimits).values({
+          userId,
+          membershipId: membershipRecord.id,
+          monthlyUseCases: limits.monthlyUseCases,
+          monthlyTutorials: limits.monthlyTutorials,
+          monthlyBlogs: limits.monthlyBlogs,
+          monthlyApiCalls: limits.monthlyApiCalls,
+          usedUseCases: 0,
+          usedTutorials: 0,
+          usedBlogs: 0,
+          usedApiCalls: 0,
+          currentPeriodStart: membershipStartDate,
+          currentPeriodEnd: membershipEndDate,
+        })
+      }
+    }
+
+    logger.info(`Free membership plan assigned successfully to user: ${userId}`)
+  } catch (error) {
+    logger.error(
+      `Failed to assign free membership plan for user: ${userId}`,
+      error as Error
+    )
+    // Do not re-throw the error, as the main user creation process has completed
   }
 }
 

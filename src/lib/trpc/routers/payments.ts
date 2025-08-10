@@ -275,6 +275,18 @@ export const paymentsRouter = createTRPCRouter({
       const currency = price.currency.toUpperCase() as 'USD' | 'EUR'
       const amount = price.unit_amount || 0
 
+      // Get plan from db
+      const plan = await ctx.db.query.membershipPlans.findFirst({
+        where: eq(membershipPlans.name, planName),
+      })
+
+      if (!plan) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'The plan does not exist',
+        })
+      }
+
       // Create or retrieve the corresponding Stripe customer based on currency
       const customerSearchQuery = `metadata["userId"]:"${ctx.userId}"`
       const customers = await stripe.customers.search({
@@ -308,7 +320,7 @@ export const paymentsRouter = createTRPCRouter({
       } else {
         // Default to showing only credit card, but add Alipay if currency supports it
         if (alipaySupported) {
-          paymentMethods = ['card', 'alipay']
+          paymentMethods = ['card']
         }
       }
 
@@ -322,12 +334,13 @@ export const paymentsRouter = createTRPCRouter({
             quantity: 1,
           },
         ],
-        mode: 'payment', // Use payment mode instead of subscription
+        mode: 'subscription', // Use payment mode instead of subscription
         success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/payment/cancelled`,
         metadata: {
           userId: ctx.userId,
           planName: planName,
+          planId: plan.id,
           currency: currency.toLowerCase(),
           paymentMethod: paymentMethod || 'card',
           membershipDurationDays: durationType === 'yearly' ? '365' : '30',
@@ -342,19 +355,19 @@ export const paymentsRouter = createTRPCRouter({
         },
       }
 
-      // If Alipay is included, set Alipay specific configuration
-      if (paymentMethods.includes('alipay')) {
-        sessionConfig.payment_method_options = {
-          alipay: {
-            setup_future_usage: undefined,
-          },
-        }
+      // // If Alipay is included, set Alipay specific configuration
+      // if (paymentMethods.includes('alipay')) {
+      //   sessionConfig.payment_method_options = {
+      //     alipay: {
+      //       setup_future_usage: undefined,
+      //     },
+      //   }
 
-        // Set locale to support Chinese Alipay interface
-        if (locale === 'de') {
-          sessionConfig.locale = 'de'
-        }
-      }
+      //   // Set locale to support Chinese Alipay interface
+      //   if (locale === 'de') {
+      //     sessionConfig.locale = 'de'
+      //   }
+      // }
 
       const session = await stripe.checkout.sessions.create(sessionConfig)
 

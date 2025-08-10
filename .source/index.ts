@@ -1,26 +1,26 @@
 // @ts-nocheck -- skip type checking
-import * as docs_31 from '../src/content/docs/en/development/project-structure.mdx?collection=docs&hash=1754513740197'
-import * as docs_30 from '../src/content/docs/en/development/database-development.mdx?collection=docs&hash=1754513740197'
-import * as docs_29 from '../src/content/docs/en/development/configuration.mdx?collection=docs&hash=1754513740197'
-import * as docs_28 from '../src/content/docs/en/development/api-development.mdx?collection=docs&hash=1754513740197'
-import * as docs_27 from '../src/content/docs/en/features/payment-billing.mdx?collection=docs&hash=1754513740197'
-import * as docs_26 from '../src/content/docs/en/features/internationalization.mdx?collection=docs&hash=1754513740197'
-import * as docs_25 from '../src/content/docs/en/features/file-management.mdx?collection=docs&hash=1754513740197'
-import * as docs_24 from '../src/content/docs/en/features/authentication.mdx?collection=docs&hash=1754513740197'
-import * as docs_23 from '../src/content/docs/en/customization/themes.mdx?collection=docs&hash=1754513740197'
-import * as docs_22 from '../src/content/docs/en/deployment/vercel.mdx?collection=docs&hash=1754513740197'
-import * as docs_21 from '../src/content/docs/en/deployment/production-setup.mdx?collection=docs&hash=1754513740197'
-import * as docs_20 from '../src/content/docs/en/deployment/docker.mdx?collection=docs&hash=1754513740197'
-import * as docs_19 from '../src/content/docs/en/deployment/ci-cd.mdx?collection=docs&hash=1754513740197'
+import * as docs_31 from '../src/content/docs/en/features/payment-billing.mdx?collection=docs&hash=1754513740197'
+import * as docs_30 from '../src/content/docs/en/features/internationalization.mdx?collection=docs&hash=1754513740197'
+import * as docs_29 from '../src/content/docs/en/features/file-management.mdx?collection=docs&hash=1754513740197'
+import * as docs_28 from '../src/content/docs/en/features/authentication.mdx?collection=docs&hash=1754513740197'
+import * as docs_27 from '../src/content/docs/en/development/project-structure.mdx?collection=docs&hash=1754513740197'
+import * as docs_26 from '../src/content/docs/en/development/database-development.mdx?collection=docs&hash=1754513740197'
+import * as docs_25 from '../src/content/docs/en/development/configuration.mdx?collection=docs&hash=1754513740197'
+import * as docs_24 from '../src/content/docs/en/development/api-development.mdx?collection=docs&hash=1754513740197'
+import * as docs_23 from '../src/content/docs/en/deployment/vercel.mdx?collection=docs&hash=1754513740197'
+import * as docs_22 from '../src/content/docs/en/deployment/production-setup.mdx?collection=docs&hash=1754513740197'
+import * as docs_21 from '../src/content/docs/en/deployment/docker.mdx?collection=docs&hash=1754513740197'
+import * as docs_20 from '../src/content/docs/en/deployment/ci-cd.mdx?collection=docs&hash=1754513740197'
+import * as docs_19 from '../src/content/docs/en/customization/themes.mdx?collection=docs&hash=1754513740197'
 import * as docs_18 from '../src/content/docs/de/features/payment-billing.mdx?collection=docs&hash=1754513740197'
 import * as docs_17 from '../src/content/docs/de/features/internationalization.mdx?collection=docs&hash=1754513740197'
 import * as docs_16 from '../src/content/docs/de/features/file-management.mdx?collection=docs&hash=1754513740197'
 import * as docs_15 from '../src/content/docs/de/features/authentication.mdx?collection=docs&hash=1754513740197'
-import * as docs_14 from '../src/content/docs/de/development/project-structure.mdx?collection=docs&hash=1754513740197'
-import * as docs_13 from '../src/content/docs/de/development/database-development.mdx?collection=docs&hash=1754513740197'
-import * as docs_12 from '../src/content/docs/de/development/configuration.mdx?collection=docs&hash=1754513740197'
-import * as docs_11 from '../src/content/docs/de/development/api-development.mdx?collection=docs&hash=1754513740197'
-import * as docs_10 from '../src/content/docs/de/customization/themes.mdx?collection=docs&hash=1754513740197'
+import * as docs_14 from '../src/content/docs/de/customization/themes.mdx?collection=docs&hash=1754513740197'
+import * as docs_13 from '../src/content/docs/de/development/project-structure.mdx?collection=docs&hash=1754513740197'
+import * as docs_12 from '../src/content/docs/de/development/database-development.mdx?collection=docs&hash=1754513740197'
+import * as docs_11 from '../src/content/docs/de/development/configuration.mdx?collection=docs&hash=1754513740197'
+import * as docs_10 from '../src/content/docs/de/development/api-development.mdx?collection=docs&hash=1754513740197'
 import * as docs_9 from '../src/content/docs/de/deployment/vercel.mdx?collection=docs&hash=1754513740197'
 import * as docs_8 from '../src/content/docs/de/deployment/production-setup.mdx?collection=docs&hash=1754513740197'
 import * as docs_7 from '../src/content/docs/de/deployment/docker.mdx?collection=docs&hash=1754513740197'
@@ -199,19 +199,11 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'de\\customization\\themes.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/de/customization/themes.mdx',
-      },
-      data: docs_10,
-    },
-    {
-      info: {
         path: 'de\\development\\api-development.mdx',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/de/development/api-development.mdx',
       },
-      data: docs_11,
+      data: docs_10,
     },
     {
       info: {
@@ -219,7 +211,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/de/development/configuration.mdx',
       },
-      data: docs_12,
+      data: docs_11,
     },
     {
       info: {
@@ -227,13 +219,21 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/de/development/database-development.mdx',
       },
-      data: docs_13,
+      data: docs_12,
     },
     {
       info: {
         path: 'de\\development\\project-structure.mdx',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/de/development/project-structure.mdx',
+      },
+      data: docs_13,
+    },
+    {
+      info: {
+        path: 'de\\customization\\themes.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/de/customization/themes.mdx',
       },
       data: docs_14,
     },
@@ -271,11 +271,19 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
+        path: 'en\\customization\\themes.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/customization/themes.mdx',
+      },
+      data: docs_19,
+    },
+    {
+      info: {
         path: 'en\\deployment\\ci-cd.mdx',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/deployment/ci-cd.mdx',
       },
-      data: docs_19,
+      data: docs_20,
     },
     {
       info: {
@@ -283,7 +291,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/deployment/docker.mdx',
       },
-      data: docs_20,
+      data: docs_21,
     },
     {
       info: {
@@ -291,7 +299,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/deployment/production-setup.mdx',
       },
-      data: docs_21,
+      data: docs_22,
     },
     {
       info: {
@@ -299,47 +307,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/deployment/vercel.mdx',
       },
-      data: docs_22,
-    },
-    {
-      info: {
-        path: 'en\\customization\\themes.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/customization/themes.mdx',
-      },
       data: docs_23,
-    },
-    {
-      info: {
-        path: 'en\\features\\authentication.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/features/authentication.mdx',
-      },
-      data: docs_24,
-    },
-    {
-      info: {
-        path: 'en\\features\\file-management.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/features/file-management.mdx',
-      },
-      data: docs_25,
-    },
-    {
-      info: {
-        path: 'en\\features\\internationalization.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/features/internationalization.mdx',
-      },
-      data: docs_26,
-    },
-    {
-      info: {
-        path: 'en\\features\\payment-billing.mdx',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/features/payment-billing.mdx',
-      },
-      data: docs_27,
     },
     {
       info: {
@@ -347,7 +315,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/development/api-development.mdx',
       },
-      data: docs_28,
+      data: docs_24,
     },
     {
       info: {
@@ -355,7 +323,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/development/configuration.mdx',
       },
-      data: docs_29,
+      data: docs_25,
     },
     {
       info: {
@@ -363,13 +331,45 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/development/database-development.mdx',
       },
-      data: docs_30,
+      data: docs_26,
     },
     {
       info: {
         path: 'en\\development\\project-structure.mdx',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/development/project-structure.mdx',
+      },
+      data: docs_27,
+    },
+    {
+      info: {
+        path: 'en\\features\\authentication.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/features/authentication.mdx',
+      },
+      data: docs_28,
+    },
+    {
+      info: {
+        path: 'en\\features\\file-management.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/features/file-management.mdx',
+      },
+      data: docs_29,
+    },
+    {
+      info: {
+        path: 'en\\features\\internationalization.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/features/internationalization.mdx',
+      },
+      data: docs_30,
+    },
+    {
+      info: {
+        path: 'en\\features\\payment-billing.mdx',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/features/payment-billing.mdx',
       },
       data: docs_31,
     },
@@ -415,6 +415,14 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
+        path: 'en\\customization\\meta.json',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/customization/meta.json',
+      },
+      data: { title: 'Customization', pages: ['themes'], defaultOpen: true },
+    },
+    {
+      info: {
         path: 'en\\deployment\\meta.json',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/en/deployment/meta.json',
@@ -427,11 +435,52 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'en\\customization\\meta.json',
+        path: 'de\\customization\\meta.json',
         absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/customization/meta.json',
+          'D:/github-projects/ai-saas-template/src/content/docs/de/customization/meta.json',
       },
       data: { title: 'Customization', pages: ['themes'], defaultOpen: true },
+    },
+    {
+      info: {
+        path: 'de\\development\\meta.json',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/de/development/meta.json',
+      },
+      data: {
+        title: 'Developer Guide',
+        pages: [
+          'configuration',
+          'project-structure',
+          'database-development',
+          'api-development',
+        ],
+        defaultOpen: true,
+      },
+    },
+    {
+      info: {
+        path: 'de\\deployment\\meta.json',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/de/deployment/meta.json',
+      },
+      data: {
+        title: 'Deployment',
+        pages: ['vercel', 'docker'],
+        defaultOpen: true,
+      },
+    },
+    {
+      info: {
+        path: 'en\\features\\meta.json',
+        absolutePath:
+          'D:/github-projects/ai-saas-template/src/content/docs/en/features/meta.json',
+      },
+      data: {
+        title: 'Features',
+        pages: ['authentication', 'file-management', 'payment-billing'],
+        defaultOpen: true,
+      },
     },
     {
       info: {
@@ -452,38 +501,6 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'en\\features\\meta.json',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/en/features/meta.json',
-      },
-      data: {
-        title: 'Features',
-        pages: ['authentication', 'file-management', 'payment-billing'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'de\\deployment\\meta.json',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/de/deployment/meta.json',
-      },
-      data: {
-        title: 'Deployment',
-        pages: ['vercel', 'docker'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'de\\customization\\meta.json',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/de/customization/meta.json',
-      },
-      data: { title: 'Customization', pages: ['themes'], defaultOpen: true },
-    },
-    {
-      info: {
         path: 'de\\features\\meta.json',
         absolutePath:
           'D:/github-projects/ai-saas-template/src/content/docs/de/features/meta.json',
@@ -491,23 +508,6 @@ export const docs = _runtime.docs<typeof _source.docs>(
       data: {
         title: 'Features',
         pages: ['authentication', 'file-management', 'payment-billing'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'de\\development\\meta.json',
-        absolutePath:
-          'D:/github-projects/ai-saas-template/src/content/docs/de/development/meta.json',
-      },
-      data: {
-        title: 'Developer Guide',
-        pages: [
-          'configuration',
-          'project-structure',
-          'database-development',
-          'api-development',
-        ],
         defaultOpen: true,
       },
     },
