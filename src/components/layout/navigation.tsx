@@ -125,6 +125,11 @@ export default function Navigation() {
       active: pathname === localePath('/') || pathname === `/${locale}`,
     },
     {
+      href: localePath('/chat'),
+      label: 'Chat',
+      active: pathname.startsWith(localePath('/chat')),
+    },
+    {
       href: localePath('/blog'),
       label: t('blogs'),
       active: pathname.startsWith(localePath('/blog')),

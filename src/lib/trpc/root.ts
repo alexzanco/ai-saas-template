@@ -1,4 +1,5 @@
 import { authRouter } from './routers/auth'
+import { chatRouter } from './routers/chat'
 import { paymentsRouter } from './routers/payments'
 import { systemRouter } from './routers/system'
 import { usersRouter } from './routers/users'
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   users: usersRouter,
   payments: paymentsRouter,
   system: systemRouter,
+  chat: chatRouter,
 })
 
 // Export type definitions for client-side type inference

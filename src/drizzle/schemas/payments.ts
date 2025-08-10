@@ -211,7 +211,10 @@ export const paymentRecords = pgTable(
     membershipDurationDays: integer('membership_duration_days').notNull(),
 
     // Discount information
-    couponCode: varchar('coupon_code', { length: 50 }),
+    couponCode: varchar('coupon_code', { length: 50 }).references(
+      () => coupons.code,
+      { onDelete: 'set null' }
+    ),
     discountAmount: decimal('discount_amount', {
       precision: 10,
       scale: 2,
@@ -433,3 +436,5 @@ export const paymentRecordsRelations = relations(paymentRecords, ({ one }) => ({
     references: [userMemberships.id],
   }),
 }))
+
+export const couponsRelations = relations(coupons, ({ many }) => ({}))

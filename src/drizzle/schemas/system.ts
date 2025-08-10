@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import {
   boolean,
   index,
@@ -165,3 +166,28 @@ export enum ConfigCategory {
   SECURITY = 'security',
   FEATURE = 'feature',
 }
+
+// ===============================
+// Relations
+// ===============================
+
+export const apiKeysRelations = relations(apiKeys, ({ one }) => ({
+  user: one(users, {
+    fields: [apiKeys.userId],
+    references: [users.id],
+  }),
+}))
+
+export const notificationsRelations = relations(notifications, ({ one }) => ({
+  user: one(users, {
+    fields: [notifications.userId],
+    references: [users.id],
+  }),
+}))
+
+export const systemConfigsRelations = relations(systemConfigs, ({ one }) => ({
+  updatedByUser: one(users, {
+    fields: [systemConfigs.updatedBy],
+    references: [users.id],
+  }),
+}))

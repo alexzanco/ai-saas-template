@@ -1,18 +1,37 @@
 // ===============================
 // Import all table definitions
 // ===============================
-import { conversations, messages, promptTemplates } from './conversations'
+import {
+  conversations,
+  conversationsRelations,
+  messages,
+  messagesRelations,
+  promptTemplates,
+  promptTemplatesRelations,
+} from './conversations'
 import {
   type UserMembership,
   type UserUsageLimit,
   coupons,
+  couponsRelations,
   membershipPlans,
+  membershipPlansRelations,
   paymentRecords,
+  paymentRecordsRelations,
   userMemberships,
+  userMembershipsRelations,
   userUsageLimits,
+  userUsageLimitsRelations,
 } from './payments'
-import { apiKeys, notifications, systemConfigs } from './system'
-import { users } from './users'
+import {
+  apiKeys,
+  apiKeysRelations,
+  notifications,
+  notificationsRelations,
+  systemConfigs,
+  systemConfigsRelations,
+} from './system'
+import { users, usersRelations } from './users'
 
 // ===============================
 // User module export
@@ -98,23 +117,35 @@ export {
 export const schema = {
   // User module
   users,
+  ...usersRelations,
 
   // Payment module
   membershipPlans,
+  ...membershipPlansRelations,
   userMemberships,
+  ...userMembershipsRelations,
   paymentRecords,
+  ...paymentRecordsRelations,
   userUsageLimits,
+  ...userUsageLimitsRelations,
   coupons,
+  ...couponsRelations,
 
   // AI conversation module
   conversations,
+  ...conversationsRelations,
   messages,
+  ...messagesRelations,
   promptTemplates,
+  ...promptTemplatesRelations,
 
   // System module
   apiKeys,
+  ...apiKeysRelations,
   notifications,
+  ...notificationsRelations,
   systemConfigs,
+  ...systemConfigsRelations,
 }
 
 // ===============================

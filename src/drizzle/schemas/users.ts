@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm'
 import {
   boolean,
   index,
@@ -8,6 +9,9 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
+import { apiKeys, notifications } from './system'
+import { conversations, promptTemplates } from './conversations'
+import { paymentRecords, userMemberships, userUsageLimits } from './payments'
 
 // ===============================
 // User Table (Clerk Integration + Admin Permissions)
@@ -96,3 +100,17 @@ export enum Currency {
   USD = 'USD',
   EUR = 'EUR',
 }
+
+// ===============================
+// Relations
+// ===============================
+
+export const usersRelations = relations(users, ({ many }) => ({
+  conversations: many(conversations),
+  promptTemplates: many(promptTemplates),
+  userMemberships: many(userMemberships),
+  paymentRecords: many(paymentRecords),
+  userUsageLimits: many(userUsageLimits),
+  apiKeys: many(apiKeys),
+  notifications: many(notifications),
+}))
